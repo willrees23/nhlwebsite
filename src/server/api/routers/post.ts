@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { NHLResult } from "~/lib/nhlresult";
-import httpGet from "~/lib/utils";
+import { httpGet } from "~/lib/utils";
 
 import {
   createTRPCRouter,
