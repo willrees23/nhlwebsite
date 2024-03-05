@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { NHLResult } from "~/lib/nhlresult";
-import httpGet from "~/lib/utils";
+import { Convert, type ScoresResult } from "~/lib/scoresResult";
+import { getDateInAmericanFormat, getLastSunday, httpGet } from "~/lib/utils";
 
 import {
   createTRPCRouter,
@@ -16,8 +16,17 @@ export const postRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
-  testFetch: publicProcedure.query(async () => {
-    const data = httpGet("https://api-web.nhle.com/v1/schedule/now");
+  scheduleNow: publicProcedure.query(async () => {
+    const lastSundayString = getLastSunday();
+
+    const data = httpGet(
+      "https://api-web.nhle.com/v1/schedule/" + lastSundayString,
+    );
+
+    return data;
+  }),
+  scoresNow: publicProcedure.input(z.string()).query(async ({ input }) => {
+    const data = httpGet("https://api-web.nhle.com/v1/score/" + input);
 
     return data;
   }),
