@@ -81,6 +81,7 @@ export interface PlaceName {
 }
 
 export enum UTCOffset {
+  The0400 = "-04:00",
   The0500 = "-05:00",
   The0600 = "-06:00",
   The0700 = "-07:00",
@@ -104,6 +105,9 @@ export enum GameState {
   Pre = "PRE",
   Fut = "FUT",
   Off = "OFF",
+  Live = "LIVE",
+  Crit = "CRIT",
+  Final = "FINAL",
 }
 
 export interface PeriodDescriptor {
@@ -524,10 +528,10 @@ const typeMap: any = {
     ],
     false,
   ),
-  UTCOffset: ["-05:00", "-06:00", "-07:00", "-08:00"],
+  UTCOffset: ["-4:00", "-05:00", "-06:00", "-07:00", "-08:00"],
   PeriodType: ["REG", "SO"],
   GameScheduleState: ["OK"],
-  GameState: ["FUT", "OFF", "PRE"],
+  GameState: ["FUT", "OFF", "PRE", "LIVE", "CRIT", "FINAL"],
   CountryCode: ["CA", "US"],
   Market: ["A", "H", "N"],
 };

@@ -1,6 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .animate-underline {
+    @apply relative after:absolute after:-bottom-[5px] after:left-0 after:h-[3px] after:w-[0%] after:bg-white after:duration-500 after:content-[''] hover:after:w-[100%]
+  }
+}
  
 @layer base {
   :root {
@@ -73,4 +79,5 @@
   body {
     @apply bg-background text-foreground;
   }
+
 }
