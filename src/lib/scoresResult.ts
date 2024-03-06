@@ -75,10 +75,8 @@ export type Clock = {
 };
 
 export type GameOutcome = {
-  lastPeriodType: PeriodType;
+  lastPeriodType: string;
 };
-
-export type PeriodType = "REG" | "SO";
 
 export type Goal = {
   period: number;
@@ -88,14 +86,14 @@ export type Goal = {
   name: Name;
   firstName: FirstName;
   lastName: Name;
-  goalModifier: GoalModifier;
+  goalModifier: string;
   assists: Assist[];
   mugshot: string;
   teamAbbrev: string;
   goalsToDate: number;
   awayScore: number;
   homeScore: number;
-  strength: Strength;
+  strength: string;
   highlightClip?: number;
   highlightClipFr?: number;
 };
@@ -109,8 +107,8 @@ export type Assist = {
 export type Name = {
   default: string;
   cs?: string;
-  sk?: string;
   fi?: string;
+  sk?: string;
 };
 
 export type FirstName = {
@@ -118,26 +116,18 @@ export type FirstName = {
   es?: string;
 };
 
-export type GoalModifier = "none" | "empty-net";
-
 export type PeriodDescriptor = {
   number: number;
-  periodType: PeriodType;
+  periodType: string;
 };
-
-export type Strength = "ev" | "pp" | "sh";
 
 export type TvBroadcast = {
   id: number;
-  market: Market;
-  countryCode: CountryCode;
+  market: string;
+  countryCode: string;
   network: string;
   sequenceNumber: number;
 };
-
-export type CountryCode = "US" | "CA";
-
-export type Market = "H" | "A" | "N";
 
 export type OddsPartner = {
   partnerId: number;
@@ -520,7 +510,7 @@ const typeMap: any = {
     false,
   ),
   GameOutcome: o(
-    [{ json: "lastPeriodType", js: "lastPeriodType", typ: r("PeriodType") }],
+    [{ json: "lastPeriodType", js: "lastPeriodType", typ: "" }],
     false,
   ),
   Goal: o(
@@ -536,14 +526,14 @@ const typeMap: any = {
       { json: "name", js: "name", typ: r("Name") },
       { json: "firstName", js: "firstName", typ: r("FirstName") },
       { json: "lastName", js: "lastName", typ: r("Name") },
-      { json: "goalModifier", js: "goalModifier", typ: r("GoalModifier") },
+      { json: "goalModifier", js: "goalModifier", typ: "" },
       { json: "assists", js: "assists", typ: a(r("Assist")) },
       { json: "mugshot", js: "mugshot", typ: "" },
       { json: "teamAbbrev", js: "teamAbbrev", typ: "" },
       { json: "goalsToDate", js: "goalsToDate", typ: 0 },
       { json: "awayScore", js: "awayScore", typ: 0 },
       { json: "homeScore", js: "homeScore", typ: 0 },
-      { json: "strength", js: "strength", typ: r("Strength") },
+      { json: "strength", js: "strength", typ: "" },
       { json: "highlightClip", js: "highlightClip", typ: u(undefined, 0) },
       { json: "highlightClipFr", js: "highlightClipFr", typ: u(undefined, 0) },
     ],
@@ -561,8 +551,8 @@ const typeMap: any = {
     [
       { json: "default", js: "default", typ: "" },
       { json: "cs", js: "cs", typ: u(undefined, "") },
-      { json: "sk", js: "sk", typ: u(undefined, "") },
       { json: "fi", js: "fi", typ: u(undefined, "") },
+      { json: "sk", js: "sk", typ: u(undefined, "") },
     ],
     false,
   ),
@@ -576,15 +566,15 @@ const typeMap: any = {
   PeriodDescriptor: o(
     [
       { json: "number", js: "number", typ: 0 },
-      { json: "periodType", js: "periodType", typ: r("PeriodType") },
+      { json: "periodType", js: "periodType", typ: "" },
     ],
     false,
   ),
   TvBroadcast: o(
     [
       { json: "id", js: "id", typ: 0 },
-      { json: "market", js: "market", typ: r("Market") },
-      { json: "countryCode", js: "countryCode", typ: r("CountryCode") },
+      { json: "market", js: "market", typ: "" },
+      { json: "countryCode", js: "countryCode", typ: "" },
       { json: "network", js: "network", typ: "" },
       { json: "sequenceNumber", js: "sequenceNumber", typ: 0 },
     ],
@@ -603,9 +593,4 @@ const typeMap: any = {
     ],
     false,
   ),
-  PeriodType: ["REG", "SO"],
-  GoalModifier: ["empty-net", "none"],
-  Strength: ["ev", "pp", "sh"],
-  CountryCode: ["CA", "US"],
-  Market: ["A", "H", "N"],
 };

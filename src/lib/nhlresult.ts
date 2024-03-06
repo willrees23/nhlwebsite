@@ -13,7 +13,7 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
-export interface NhlResult {
+export type NhlResult = {
   nextStartDate: Date;
   previousStartDate: Date;
   gameWeek: GameWeek[];
@@ -23,41 +23,41 @@ export interface NhlResult {
   regularSeasonEndDate: Date;
   playoffEndDate: Date;
   numberOfGames: number;
-}
+};
 
-export interface GameWeek {
+export type GameWeek = {
   date: Date;
   dayAbbrev: string;
   numberOfGames: number;
   games: Game[];
-}
+};
 
-export interface Game {
+export type Game = {
   id: number;
   season: number;
   gameType: number;
   venue: Venue;
   neutralSite: boolean;
   startTimeUTC: Date;
-  easternUTCOffset: UTCOffset;
-  venueUTCOffset: UTCOffset;
+  easternUTCOffset: string;
+  venueUTCOffset: string;
   venueTimezone: string;
-  gameState: GameState;
-  gameScheduleState: GameScheduleState;
+  gameState: string;
+  gameScheduleState: string;
   tvBroadcasts: TvBroadcast[];
   awayTeam: Team;
   homeTeam: Team;
   periodDescriptor: PeriodDescriptor;
   gameOutcome?: GameOutcome;
-  winningGoalie?: WinningGoal;
-  winningGoalScorer?: WinningGoal;
+  winningGoalie?: WinningGoalie;
+  winningGoalScorer?: WinningGoalScorer;
   threeMinRecap?: string;
   gameCenterLink: string;
   threeMinRecapFr?: string;
   ticketsLink?: string;
-}
+};
 
-export interface Team {
+export type Team = {
   id: number;
   placeName: PlaceName;
   abbrev: string;
@@ -68,96 +68,64 @@ export interface Team {
   radioLink?: string;
   odds?: Odd[];
   homeSplitSquad?: boolean;
-}
+};
 
-export interface Odd {
+export type Odd = {
   providerId: number;
   value: string;
-}
+};
 
-export interface PlaceName {
+export type PlaceName = {
   default: string;
   fr?: string;
-}
+};
 
-export enum UTCOffset {
-  The0400 = "-04:00",
-  The0500 = "-05:00",
-  The0600 = "-06:00",
-  The0700 = "-07:00",
-  The0800 = "-08:00",
-}
+export type GameOutcome = {
+  lastPeriodType: string;
+};
 
-export interface GameOutcome {
-  lastPeriodType: PeriodType;
-}
-
-export enum PeriodType {
-  Reg = "REG",
-  So = "SO",
-}
-
-export enum GameScheduleState {
-  Ok = "OK",
-}
-
-export enum GameState {
-  Pre = "PRE",
-  Fut = "FUT",
-  Off = "OFF",
-  Live = "LIVE",
-  Crit = "CRIT",
-  Final = "FINAL",
-}
-
-export interface PeriodDescriptor {
+export type PeriodDescriptor = {
   number?: number;
-  periodType?: PeriodType;
-}
+  periodType?: string;
+};
 
-export interface TvBroadcast {
+export type TvBroadcast = {
   id: number;
-  market: Market;
-  countryCode: CountryCode;
+  market: string;
+  countryCode: string;
   network: string;
   sequenceNumber: number;
-}
+};
 
-export enum CountryCode {
-  CA = "CA",
-  Us = "US",
-}
-
-export enum Market {
-  A = "A",
-  H = "H",
-  N = "N",
-}
-
-export interface Venue {
+export type Venue = {
   default: string;
   es?: string;
   fr?: string;
-}
+};
 
-export interface WinningGoal {
+export type WinningGoalScorer = {
+  playerId: number;
+  firstInitial: FirstInitial;
+  lastName: FirstInitial;
+};
+
+export type FirstInitial = {
+  default: string;
+};
+
+export type WinningGoalie = {
   playerId: number;
   firstInitial: FirstInitial;
   lastName: LastName;
-}
+};
 
-export interface FirstInitial {
-  default: string;
-}
-
-export interface LastName {
+export type LastName = {
   default: string;
   cs?: string;
   sk?: string;
-  fi?: string;
-}
+};
 
-export interface OddsPartner {
+export type OddsPartner = {
   partnerId: number;
   country: string;
   name: string;
@@ -166,7 +134,7 @@ export interface OddsPartner {
   bgColor: string;
   textColor: string;
   accentColor: string;
-}
+};
 
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
@@ -177,6 +145,118 @@ export class Convert {
 
   public static nhlResultToJson(value: NhlResult): string {
     return JSON.stringify(uncast(value, r("NhlResult")), null, 2);
+  }
+
+  public static toGameWeek(json: string): GameWeek {
+    return cast(JSON.parse(json), r("GameWeek"));
+  }
+
+  public static gameWeekToJson(value: GameWeek): string {
+    return JSON.stringify(uncast(value, r("GameWeek")), null, 2);
+  }
+
+  public static toGame(json: string): Game {
+    return cast(JSON.parse(json), r("Game"));
+  }
+
+  public static gameToJson(value: Game): string {
+    return JSON.stringify(uncast(value, r("Game")), null, 2);
+  }
+
+  public static toTeam(json: string): Team {
+    return cast(JSON.parse(json), r("Team"));
+  }
+
+  public static teamToJson(value: Team): string {
+    return JSON.stringify(uncast(value, r("Team")), null, 2);
+  }
+
+  public static toOdd(json: string): Odd {
+    return cast(JSON.parse(json), r("Odd"));
+  }
+
+  public static oddToJson(value: Odd): string {
+    return JSON.stringify(uncast(value, r("Odd")), null, 2);
+  }
+
+  public static toPlaceName(json: string): PlaceName {
+    return cast(JSON.parse(json), r("PlaceName"));
+  }
+
+  public static placeNameToJson(value: PlaceName): string {
+    return JSON.stringify(uncast(value, r("PlaceName")), null, 2);
+  }
+
+  public static toGameOutcome(json: string): GameOutcome {
+    return cast(JSON.parse(json), r("GameOutcome"));
+  }
+
+  public static gameOutcomeToJson(value: GameOutcome): string {
+    return JSON.stringify(uncast(value, r("GameOutcome")), null, 2);
+  }
+
+  public static toPeriodDescriptor(json: string): PeriodDescriptor {
+    return cast(JSON.parse(json), r("PeriodDescriptor"));
+  }
+
+  public static periodDescriptorToJson(value: PeriodDescriptor): string {
+    return JSON.stringify(uncast(value, r("PeriodDescriptor")), null, 2);
+  }
+
+  public static toTvBroadcast(json: string): TvBroadcast {
+    return cast(JSON.parse(json), r("TvBroadcast"));
+  }
+
+  public static tvBroadcastToJson(value: TvBroadcast): string {
+    return JSON.stringify(uncast(value, r("TvBroadcast")), null, 2);
+  }
+
+  public static toVenue(json: string): Venue {
+    return cast(JSON.parse(json), r("Venue"));
+  }
+
+  public static venueToJson(value: Venue): string {
+    return JSON.stringify(uncast(value, r("Venue")), null, 2);
+  }
+
+  public static toWinningGoalScorer(json: string): WinningGoalScorer {
+    return cast(JSON.parse(json), r("WinningGoalScorer"));
+  }
+
+  public static winningGoalScorerToJson(value: WinningGoalScorer): string {
+    return JSON.stringify(uncast(value, r("WinningGoalScorer")), null, 2);
+  }
+
+  public static toFirstInitial(json: string): FirstInitial {
+    return cast(JSON.parse(json), r("FirstInitial"));
+  }
+
+  public static firstInitialToJson(value: FirstInitial): string {
+    return JSON.stringify(uncast(value, r("FirstInitial")), null, 2);
+  }
+
+  public static toWinningGoalie(json: string): WinningGoalie {
+    return cast(JSON.parse(json), r("WinningGoalie"));
+  }
+
+  public static winningGoalieToJson(value: WinningGoalie): string {
+    return JSON.stringify(uncast(value, r("WinningGoalie")), null, 2);
+  }
+
+  public static toLastName(json: string): LastName {
+    return cast(JSON.parse(json), r("LastName"));
+  }
+
+  public static lastNameToJson(value: LastName): string {
+    return JSON.stringify(uncast(value, r("LastName")), null, 2);
+  }
+
+  public static toOddsPartner(json: string): OddsPartner {
+    return cast(JSON.parse(json), r("OddsPartner"));
+  }
+
+  public static oddsPartnerToJson(value: OddsPartner): string {
+    return JSON.stringify(uncast(value, r("OddsPartner")), null, 2);
   }
 }
 
@@ -296,7 +376,7 @@ function transform(
     });
     Object.getOwnPropertyNames(val).forEach((key) => {
       if (!Object.prototype.hasOwnProperty.call(props, key)) {
-        result[key] = transform(val[key], additional, getProps, key, ref);
+        result[key] = val[key];
       }
     });
     return result;
@@ -396,15 +476,11 @@ const typeMap: any = {
       { json: "venue", js: "venue", typ: r("Venue") },
       { json: "neutralSite", js: "neutralSite", typ: true },
       { json: "startTimeUTC", js: "startTimeUTC", typ: Date },
-      { json: "easternUTCOffset", js: "easternUTCOffset", typ: r("UTCOffset") },
-      { json: "venueUTCOffset", js: "venueUTCOffset", typ: r("UTCOffset") },
+      { json: "easternUTCOffset", js: "easternUTCOffset", typ: "" },
+      { json: "venueUTCOffset", js: "venueUTCOffset", typ: "" },
       { json: "venueTimezone", js: "venueTimezone", typ: "" },
-      { json: "gameState", js: "gameState", typ: r("GameState") },
-      {
-        json: "gameScheduleState",
-        js: "gameScheduleState",
-        typ: r("GameScheduleState"),
-      },
+      { json: "gameState", js: "gameState", typ: "" },
+      { json: "gameScheduleState", js: "gameScheduleState", typ: "" },
       { json: "tvBroadcasts", js: "tvBroadcasts", typ: a(r("TvBroadcast")) },
       { json: "awayTeam", js: "awayTeam", typ: r("Team") },
       { json: "homeTeam", js: "homeTeam", typ: r("Team") },
@@ -421,12 +497,12 @@ const typeMap: any = {
       {
         json: "winningGoalie",
         js: "winningGoalie",
-        typ: u(undefined, r("WinningGoal")),
+        typ: u(undefined, r("WinningGoalie")),
       },
       {
         json: "winningGoalScorer",
         js: "winningGoalScorer",
-        typ: u(undefined, r("WinningGoal")),
+        typ: u(undefined, r("WinningGoalScorer")),
       },
       { json: "threeMinRecap", js: "threeMinRecap", typ: u(undefined, "") },
       { json: "gameCenterLink", js: "gameCenterLink", typ: "" },
@@ -465,25 +541,21 @@ const typeMap: any = {
     false,
   ),
   GameOutcome: o(
-    [{ json: "lastPeriodType", js: "lastPeriodType", typ: r("PeriodType") }],
+    [{ json: "lastPeriodType", js: "lastPeriodType", typ: "" }],
     false,
   ),
   PeriodDescriptor: o(
     [
       { json: "number", js: "number", typ: u(undefined, 0) },
-      {
-        json: "periodType",
-        js: "periodType",
-        typ: u(undefined, r("PeriodType")),
-      },
+      { json: "periodType", js: "periodType", typ: u(undefined, "") },
     ],
     false,
   ),
   TvBroadcast: o(
     [
       { json: "id", js: "id", typ: 0 },
-      { json: "market", js: "market", typ: r("Market") },
-      { json: "countryCode", js: "countryCode", typ: r("CountryCode") },
+      { json: "market", js: "market", typ: "" },
+      { json: "countryCode", js: "countryCode", typ: "" },
       { json: "network", js: "network", typ: "" },
       { json: "sequenceNumber", js: "sequenceNumber", typ: 0 },
     ],
@@ -497,7 +569,16 @@ const typeMap: any = {
     ],
     false,
   ),
-  WinningGoal: o(
+  WinningGoalScorer: o(
+    [
+      { json: "playerId", js: "playerId", typ: 0 },
+      { json: "firstInitial", js: "firstInitial", typ: r("FirstInitial") },
+      { json: "lastName", js: "lastName", typ: r("FirstInitial") },
+    ],
+    false,
+  ),
+  FirstInitial: o([{ json: "default", js: "default", typ: "" }], false),
+  WinningGoalie: o(
     [
       { json: "playerId", js: "playerId", typ: 0 },
       { json: "firstInitial", js: "firstInitial", typ: r("FirstInitial") },
@@ -505,13 +586,11 @@ const typeMap: any = {
     ],
     false,
   ),
-  FirstInitial: o([{ json: "default", js: "default", typ: "" }], false),
   LastName: o(
     [
       { json: "default", js: "default", typ: "" },
       { json: "cs", js: "cs", typ: u(undefined, "") },
       { json: "sk", js: "sk", typ: u(undefined, "") },
-      { json: "fi", js: "fi", typ: u(undefined, "") },
     ],
     false,
   ),
@@ -528,10 +607,4 @@ const typeMap: any = {
     ],
     false,
   ),
-  UTCOffset: ["-4:00", "-05:00", "-06:00", "-07:00", "-08:00"],
-  PeriodType: ["REG", "SO"],
-  GameScheduleState: ["OK"],
-  GameState: ["FUT", "OFF", "PRE", "LIVE", "CRIT", "FINAL"],
-  CountryCode: ["CA", "US"],
-  Market: ["A", "H", "N"],
 };

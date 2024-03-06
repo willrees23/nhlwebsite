@@ -25,9 +25,14 @@ export const postRouter = createTRPCRouter({
 
     return data;
   }),
-  scoresNow: publicProcedure.input(z.string()).query(async ({ input }) => {
-    const data = httpGet("https://api-web.nhle.com/v1/score/" + input);
+  scoresNow: publicProcedure
+    .input(z.string().optional())
+    .query(async ({ input }) => {
+      if (input === undefined) {
+        return null;
+      }
+      const data = httpGet("https://api-web.nhle.com/v1/score/" + input);
 
-    return data;
-  }),
+      return data;
+    }),
 });

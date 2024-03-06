@@ -1,31 +1,30 @@
-import { GameState } from "~/lib/nhlresult";
 import { cn } from "~/lib/utils";
 import { Badge } from "./ui/badge";
 
 type StateBadgeProps = {
-  state: GameState;
+  state: string;
   className?: string;
 };
 
 const StateBadge = ({ className, state }: StateBadgeProps) => {
   const badgeClass = cn(className, {
-    "animate-pulse bg-green-500": state === GameState.Live,
-    "bg-zinc-700": state === GameState.Fut,
-    "bg-[#202020]": state === GameState.Off,
-    "bg-orange-500": state === GameState.Pre,
-    "animate-pulse bg-red-500": state === GameState.Crit,
+    "animate-pulse bg-green-500": state === "LIVE",
+    "bg-zinc-700": state === "FUT",
+    "bg-[#202020]": state === "OFF",
+    "bg-orange-500": state === "PRE",
+    "animate-pulse bg-red-500": state === "CRIT",
   });
   return (
     <Badge className={badgeClass}>
-      {state === GameState.Live
+      {state === "LIVE"
         ? "LIVE"
-        : state === GameState.Fut
+        : state === "FUT"
           ? "Scheduled"
-          : state === GameState.Off
+          : state === "OFF"
             ? "Concluded"
-            : state === GameState.Pre
+            : state === "PRE"
               ? "Starting Soon"
-              : state === GameState.Crit
+              : state === "CRIT"
                 ? "Final Minutes"
                 : "Just Finished"}
     </Badge>

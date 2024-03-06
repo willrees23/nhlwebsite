@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import { Convert as ScoresConvert } from "~/lib/scoresResult";
 import GameView from "~/components/gameview";
 import { useSearchParams } from "next/navigation";
+import LoadingPage from "~/components/loading";
 
 const GamePage = () => {
   const router = useRouter();
@@ -13,15 +14,15 @@ const GamePage = () => {
   const { gameId } = router.query;
   const date = searchParams.get("date");
 
-  const scoresNow = api.post.scoresNow.useQuery(date!);
+  const scoresNow = api.post.scoresNow.useQuery(
+    date as string | void | undefined,
+  );
 
   if (scoresNow.error || scoresNow.data === undefined) {
-    return (
-      <>
-        <Layout loading={true} pageTitle="Loading..." />
-      </>
-    );
+    return <LoadingPage />;
   }
+
+  console.log(scoresNow.data);
 
   const scoresJsonString = JSON.stringify(scoresNow.data, null, 2);
   const nhlScores = ScoresConvert.toScoresResult(scoresJsonString);
