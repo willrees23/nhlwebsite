@@ -21,7 +21,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { GameState } from "~/lib/nhlresult";
 import StateBadge from "./statebadge";
 
 type GameViewProps = {
@@ -138,7 +137,7 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
     >
       <StateBadge
         className="text-md flex items-center justify-center"
-        state={game.gameState as GameState}
+        state={game.gameState.toString()}
       />
       <div className="flex flex-col items-center justify-center gap-x-10 gap-y-5 *:text-center max-lg:mt-5 lg:grid lg:grid-cols-3">
         <div className="flex flex-col items-center">
