@@ -14,6 +14,7 @@ import {
   getDateInAmericanFormat,
   cn,
   dayOfWeekNumOfMonth,
+  getUntil,
 } from "~/lib/utils";
 import { api } from "~/utils/api";
 import { Convert as ResultConvert } from "~/lib/nhlresult";
@@ -145,6 +146,11 @@ const SchedulePage = () => {
                           <h1>
                             <span className="font-bold">Scheduled:</span>{" "}
                             {game.startTimeUTC.toLocaleTimeString()}
+                          </h1>
+                        ) : game.gameState === "PRE" ? (
+                          <h1>
+                            <span className="font-bold">Starting Soon:</span>{" "}
+                            {getUntil(game.startTimeUTC, true)}
                           </h1>
                         ) : (
                           <h1>
