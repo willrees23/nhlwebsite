@@ -1,38 +1,30 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { ToastAction } from "@radix-ui/react-toast";
-import { RefreshCwIcon } from "lucide-react";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
-import { toast } from "sonner";
 import Layout from "~/components/Layout";
-import StateBadge from "~/components/statebadge";
-import { Badge } from "~/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { useToast } from "~/components/ui/use-toast";
-import { nhlFont } from "~/lib/fonts";
-import { Convert as ResultConvert } from "~/lib/nhlresult";
-import { Convert as ScoresConvert } from "~/lib/scoresResult";
-import {
-  cn,
-  dayOfWeekNumOfMonth,
-  getDateInAmericanFormat,
-  getLastSunday,
-  getLastSundayDate,
-} from "~/lib/utils";
-
-import { api } from "~/utils/api";
 
 export default function Home() {
   return (
     <>
-      <Layout pageTitle="NHL Unofficial"></Layout>
+      <Layout pageTitle="NHL Unofficial" showPageTitle={false}>
+        <div className="flex flex-col items-center justify-center py-2">
+          <h1 className="text-6xl font-bold">Welcome to NHL Unofficial!</h1>
+          <p className="mt-3 text-2xl">
+            This is a website that uses the{" "}
+            <Link
+              href={"https://api-web.nhle.com/v1/"}
+              target="_blank"
+              className="animate-underline text-blue-500 transition-all duration-700"
+            >
+              NHL API
+            </Link>{" "}
+            to display game schedules, results and league standings.
+          </p>
+          <p className="mt-3 text-2xl">
+            This website is a work in progress and is not affiliated with the
+            National Hockey League.
+          </p>
+        </div>
+      </Layout>
     </>
   );
 }
