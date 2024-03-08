@@ -6,6 +6,7 @@ import { Convert as ScoresConvert } from "~/lib/scoresResult";
 import GameView from "~/components/gameview";
 import { useSearchParams } from "next/navigation";
 import LoadingPage from "~/components/loading";
+import { Button } from "~/components/ui/button";
 
 const GamePage = () => {
   const router = useRouter();
@@ -30,7 +31,16 @@ const GamePage = () => {
   return (
     <>
       <Layout pageTitle="Game View">
-        <div className="flex w-full justify-center py-20">
+        <Button
+          className="mb-2 bg-transparent"
+          onClick={() => {
+            void scoresNow.refetch();
+          }}
+          variant={"outline"}
+        >
+          {scoresNow.isFetching ? "Refreshing..." : "Refresh"}
+        </Button>
+        <div className="flex w-full justify-center p-3">
           <div className="flex min-h-fit w-10/12 flex-col items-center rounded-lg bg-opacity-20">
             <GameView
               gameId={gameId as unknown as number}

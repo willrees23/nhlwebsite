@@ -63,7 +63,7 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
     return (
       <div className="flex flex-col">
         <div className="flex flex-row space-x-2">
-          <h1>{goal.name.default}</h1>
+          <h1 className="overflow-ellipsis text-nowrap">{goal.name.default}</h1>
           <div>
             <TooltipProvider>
               <Tooltip>
@@ -103,6 +103,7 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
                   <Image
                     width={45}
                     height={45}
+                    className="min-h-[45px] min-w-[45px]"
                     src={goal.mugshot}
                     priority
                     alt="PlayerMugshot"
@@ -139,6 +140,31 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
         className="text-md flex items-center justify-center"
         state={game.gameState.toString()}
       />
+      {game.clock.inIntermission ? (
+        <h1
+          className={`font-nhl ${nhlFont.variable} mt-2 text-2xl font-extralight`}
+        >
+          INTERMISSION
+        </h1>
+      ) : (
+        <h1 className={`mt-2 font-mono font-extralight`}>
+          {game.clock.timeRemaining} | {nthalize(game.periodDescriptor.number)}{" "}
+          Period (
+          {game.periodDescriptor.periodType === "REG"
+            ? "Regulation"
+            : game.periodDescriptor.periodType === "OT"
+              ? "Overtime"
+              : "Shootout"}
+          )
+        </h1>
+      )}
+      {game.situation && (
+        <h1 className="mt-1">
+          {game.situation.awayTeam.strength} on{" "}
+          {game.situation.homeTeam.strength} | {game.situation.timeRemaining}{" "}
+          remaining
+        </h1>
+      )}
       <div className="flex flex-col items-center justify-center gap-x-10 gap-y-5 *:text-center max-lg:mt-5 lg:grid lg:grid-cols-3">
         <div className="flex flex-col items-center">
           <Image
@@ -151,6 +177,18 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
             className={`mt-2 text-center font-nhl text-3xl ${nhlFont.variable}`}
           >
             {game.awayTeam.name.default.toUpperCase()}
+
+            <h1 className="text-base">
+              {game.situation?.awayTeam.situationDescriptions &&
+              game.situation?.awayTeam.situationDescriptions[0] === "PP" ? (
+                <span className="text-red-500">POWER PLAY</span>
+              ) : game.situation?.homeTeam.situationDescriptions &&
+                game.situation?.homeTeam.situationDescriptions[0] === "PP" ? (
+                <span className="text-blue-500">SHORT HANDED</span>
+              ) : (
+                <span></span>
+              )}
+            </h1>
           </h1>
         </div>
         <div className="">
@@ -169,6 +207,18 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
             className={`mt-2 text-center font-nhl text-3xl ${nhlFont.variable}`}
           >
             {game.homeTeam.name.default.toUpperCase()}
+
+            <h1 className="text-base">
+              {game.situation?.homeTeam.situationDescriptions &&
+              game.situation?.homeTeam.situationDescriptions[0] === "PP" ? (
+                <span className="text-red-500">POWER PLAY</span>
+              ) : game.situation?.awayTeam.situationDescriptions &&
+                game.situation?.awayTeam.situationDescriptions[0] === "PP" ? (
+                <span className="text-blue-500">SHORT HANDED</span>
+              ) : (
+                <span></span>
+              )}
+            </h1>
           </h1>
         </div>
       </div>
