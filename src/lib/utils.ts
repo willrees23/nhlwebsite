@@ -1,6 +1,12 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { nhlFont } from "./fonts";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import duration from "dayjs/plugin/duration";
+import isToday from "dayjs/plugin/isToday";
+import isTomorrow from "dayjs/plugin/isTomorrow";
+import isYesterday from "dayjs/plugin/isYesterday";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -68,6 +74,13 @@ function getLastSunday() {
   return lastSundayString;
 }
 
+function getUntil(date: Date, inText = false) {
+  const newDate = dayjs(date);
+  const now = dayjs();
+  dayjs.extend(relativeTime);
+  return newDate.from(now, inText);
+}
+
 function isWithinNextHours(date: Date, hours: number) {
   const now = new Date();
   const diff = date.getTime() - now.getTime();
@@ -127,6 +140,7 @@ export {
   getDateInAmericanFormat,
   nthalize,
   nhlClass,
+  getUntil,
   httpGet,
   dayOfWeek,
   dayOfWeekNumOfMonth,
