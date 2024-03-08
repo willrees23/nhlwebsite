@@ -14,130 +14,172 @@
 // match the expected interface, even if the JSON is valid.
 
 export type ScoresResult = {
-  prevDate: Date;
-  currentDate: Date;
-  nextDate: Date;
-  gameWeek: GameWeek[];
-  oddsPartners: OddsPartner[];
-  games: Game[];
+  prevDate?: Date;
+  currentDate?: Date;
+  nextDate?: Date;
+  gameWeek?: GameWeek[];
+  oddsPartners?: OddsPartner[];
+  games?: Game[];
 };
 
 export type GameWeek = {
-  date: Date;
-  dayAbbrev: string;
-  numberOfGames: number;
+  date?: Date;
+  dayAbbrev?: string;
+  numberOfGames?: number;
 };
 
 export type Game = {
-  id: number;
-  season: number;
-  gameType: number;
-  gameDate: Date;
-  venue: Venue;
-  startTimeUTC: Date;
-  easternUTCOffset: string;
-  venueUTCOffset: string;
-  tvBroadcasts: TvBroadcast[];
-  gameState: string;
-  gameScheduleState: string;
-  awayTeam: Team;
-  homeTeam: Team;
-  gameCenterLink: string;
-  threeMinRecap: string;
-  clock: Clock;
-  neutralSite: boolean;
-  venueTimezone: string;
-  period: number;
-  periodDescriptor: PeriodDescriptor;
-  gameOutcome: GameOutcome;
-  goals: Goal[];
-  threeMinRecapFr?: string;
+  id?: number;
+  season?: number;
+  gameType?: number;
+  gameDate?: Date;
+  venue?: Venue;
+  startTimeUTC?: Date;
+  easternUTCOffset?: string;
+  venueUTCOffset?: string;
+  tvBroadcasts?: TvBroadcast[];
+  gameState?: string;
+  gameScheduleState?: string;
+  awayTeam?: GameAwayTeam;
+  homeTeam?: GameHomeTeam;
+  gameCenterLink?: string;
+  clock?: Clock;
+  neutralSite?: boolean;
+  venueTimezone?: string;
+  period?: number;
+  periodDescriptor?: PeriodDescriptor;
+  situation?: Situation;
+  teamLeaders?: TeamLeader[];
+  goals?: Goal[];
+  ticketsLink?: string;
 };
 
-export type Team = {
-  id: number;
-  name: Venue;
-  abbrev: string;
-  score: number;
-  sog: number;
-  logo: string;
+export type GameAwayTeam = {
+  id?: number;
+  name?: AwayTeamName;
+  abbrev?: string;
+  score?: number;
+  sog?: number;
+  logo?: string;
+  record?: string;
+  odds?: Odd[];
 };
 
-export type Venue = {
-  default: string;
+export type AwayTeamName = {
+  default?: string;
+  fr?: string;
+};
+
+export type Odd = {
+  providerId?: number;
+  value?: string;
 };
 
 export type Clock = {
-  timeRemaining: string;
-  secondsRemaining: number;
-  running: boolean;
-  inIntermission: boolean;
-};
-
-export type GameOutcome = {
-  lastPeriodType: string;
+  timeRemaining?: string;
+  secondsRemaining?: number;
+  running?: boolean;
+  inIntermission?: boolean;
 };
 
 export type Goal = {
-  period: number;
-  periodDescriptor: PeriodDescriptor;
-  timeInPeriod: string;
-  playerId: number;
-  name: Name;
-  firstName: FirstName;
-  lastName: Name;
-  goalModifier: string;
-  assists: Assist[];
-  mugshot: string;
-  teamAbbrev: string;
-  goalsToDate: number;
-  awayScore: number;
-  homeScore: number;
-  strength: string;
+  period?: number;
+  periodDescriptor?: PeriodDescriptor;
+  timeInPeriod?: string;
+  playerId?: number;
+  name?: Venue;
+  firstName?: Venue;
+  lastName?: Venue;
+  goalModifier?: string;
+  assists?: Assist[];
+  mugshot?: string;
+  teamAbbrev?: string;
+  goalsToDate?: number;
+  awayScore?: number;
+  homeScore?: number;
+  strength?: string;
   highlightClip?: number;
   highlightClipFr?: number;
 };
 
 export type Assist = {
-  playerId: number;
-  name: Name;
-  assistsToDate: number;
+  playerId?: number;
+  name?: Venue;
+  assistsToDate?: number;
 };
 
-export type Name = {
-  default: string;
-  cs?: string;
-  fi?: string;
-  sk?: string;
-};
-
-export type FirstName = {
-  default: string;
-  es?: string;
+export type Venue = {
+  default?: string;
 };
 
 export type PeriodDescriptor = {
-  number: number;
-  periodType: string;
+  number?: number;
+  periodType?: string;
+};
+
+export type GameHomeTeam = {
+  id?: number;
+  name?: Venue;
+  abbrev?: string;
+  score?: number;
+  sog?: number;
+  logo?: string;
+  record?: string;
+  odds?: Odd[];
+};
+
+export type Situation = {
+  homeTeam?: SituationHomeTeam;
+  awayTeam?: SituationAwayTeam;
+  situationCode?: string;
+  timeRemaining?: string;
+  secondsRemaining?: number;
+};
+
+export type SituationAwayTeam = {
+  abbrev?: string;
+  strength?: number;
+};
+
+export type SituationHomeTeam = {
+  abbrev?: string;
+  situationDescriptions?: string[];
+  strength?: number;
+};
+
+export type TeamLeader = {
+  id?: number;
+  name?: TeamLeaderName;
+  headshot?: string;
+  teamAbbrev?: string;
+  category?: string;
+  value?: number;
+};
+
+export type TeamLeaderName = {
+  default?: string;
+  cs?: string;
+  sk?: string;
+  fi?: string;
 };
 
 export type TvBroadcast = {
-  id: number;
-  market: string;
-  countryCode: string;
-  network: string;
-  sequenceNumber: number;
+  id?: number;
+  market?: string;
+  countryCode?: string;
+  network?: string;
+  sequenceNumber?: number;
 };
 
 export type OddsPartner = {
-  partnerId: number;
-  country: string;
-  name: string;
-  imageUrl: string;
+  partnerId?: number;
+  country?: string;
+  name?: string;
+  imageUrl?: string;
   siteUrl?: string;
-  bgColor: string;
-  textColor: string;
-  accentColor: string;
+  bgColor?: string;
+  textColor?: string;
+  accentColor?: string;
 };
 
 // Converts JSON strings to/from your types
@@ -167,20 +209,28 @@ export class Convert {
     return JSON.stringify(uncast(value, r("Game")), null, 2);
   }
 
-  public static toTeam(json: string): Team {
-    return cast(JSON.parse(json), r("Team"));
+  public static toGameAwayTeam(json: string): GameAwayTeam {
+    return cast(JSON.parse(json), r("GameAwayTeam"));
   }
 
-  public static teamToJson(value: Team): string {
-    return JSON.stringify(uncast(value, r("Team")), null, 2);
+  public static gameAwayTeamToJson(value: GameAwayTeam): string {
+    return JSON.stringify(uncast(value, r("GameAwayTeam")), null, 2);
   }
 
-  public static toVenue(json: string): Venue {
-    return cast(JSON.parse(json), r("Venue"));
+  public static toAwayTeamName(json: string): AwayTeamName {
+    return cast(JSON.parse(json), r("AwayTeamName"));
   }
 
-  public static venueToJson(value: Venue): string {
-    return JSON.stringify(uncast(value, r("Venue")), null, 2);
+  public static awayTeamNameToJson(value: AwayTeamName): string {
+    return JSON.stringify(uncast(value, r("AwayTeamName")), null, 2);
+  }
+
+  public static toOdd(json: string): Odd {
+    return cast(JSON.parse(json), r("Odd"));
+  }
+
+  public static oddToJson(value: Odd): string {
+    return JSON.stringify(uncast(value, r("Odd")), null, 2);
   }
 
   public static toClock(json: string): Clock {
@@ -189,14 +239,6 @@ export class Convert {
 
   public static clockToJson(value: Clock): string {
     return JSON.stringify(uncast(value, r("Clock")), null, 2);
-  }
-
-  public static toGameOutcome(json: string): GameOutcome {
-    return cast(JSON.parse(json), r("GameOutcome"));
-  }
-
-  public static gameOutcomeToJson(value: GameOutcome): string {
-    return JSON.stringify(uncast(value, r("GameOutcome")), null, 2);
   }
 
   public static toGoal(json: string): Goal {
@@ -215,20 +257,12 @@ export class Convert {
     return JSON.stringify(uncast(value, r("Assist")), null, 2);
   }
 
-  public static toName(json: string): Name {
-    return cast(JSON.parse(json), r("Name"));
+  public static toVenue(json: string): Venue {
+    return cast(JSON.parse(json), r("Venue"));
   }
 
-  public static nameToJson(value: Name): string {
-    return JSON.stringify(uncast(value, r("Name")), null, 2);
-  }
-
-  public static toFirstName(json: string): FirstName {
-    return cast(JSON.parse(json), r("FirstName"));
-  }
-
-  public static firstNameToJson(value: FirstName): string {
-    return JSON.stringify(uncast(value, r("FirstName")), null, 2);
+  public static venueToJson(value: Venue): string {
+    return JSON.stringify(uncast(value, r("Venue")), null, 2);
   }
 
   public static toPeriodDescriptor(json: string): PeriodDescriptor {
@@ -237,6 +271,54 @@ export class Convert {
 
   public static periodDescriptorToJson(value: PeriodDescriptor): string {
     return JSON.stringify(uncast(value, r("PeriodDescriptor")), null, 2);
+  }
+
+  public static toGameHomeTeam(json: string): GameHomeTeam {
+    return cast(JSON.parse(json), r("GameHomeTeam"));
+  }
+
+  public static gameHomeTeamToJson(value: GameHomeTeam): string {
+    return JSON.stringify(uncast(value, r("GameHomeTeam")), null, 2);
+  }
+
+  public static toSituation(json: string): Situation {
+    return cast(JSON.parse(json), r("Situation"));
+  }
+
+  public static situationToJson(value: Situation): string {
+    return JSON.stringify(uncast(value, r("Situation")), null, 2);
+  }
+
+  public static toSituationAwayTeam(json: string): SituationAwayTeam {
+    return cast(JSON.parse(json), r("SituationAwayTeam"));
+  }
+
+  public static situationAwayTeamToJson(value: SituationAwayTeam): string {
+    return JSON.stringify(uncast(value, r("SituationAwayTeam")), null, 2);
+  }
+
+  public static toSituationHomeTeam(json: string): SituationHomeTeam {
+    return cast(JSON.parse(json), r("SituationHomeTeam"));
+  }
+
+  public static situationHomeTeamToJson(value: SituationHomeTeam): string {
+    return JSON.stringify(uncast(value, r("SituationHomeTeam")), null, 2);
+  }
+
+  public static toTeamLeader(json: string): TeamLeader {
+    return cast(JSON.parse(json), r("TeamLeader"));
+  }
+
+  public static teamLeaderToJson(value: TeamLeader): string {
+    return JSON.stringify(uncast(value, r("TeamLeader")), null, 2);
+  }
+
+  public static toTeamLeaderName(json: string): TeamLeaderName {
+    return cast(JSON.parse(json), r("TeamLeaderName"));
+  }
+
+  public static teamLeaderNameToJson(value: TeamLeaderName): string {
+    return JSON.stringify(uncast(value, r("TeamLeaderName")), null, 2);
   }
 
   public static toTvBroadcast(json: string): TvBroadcast {
@@ -439,101 +521,144 @@ function r(name: string) {
 const typeMap: any = {
   ScoresResult: o(
     [
-      { json: "prevDate", js: "prevDate", typ: Date },
-      { json: "currentDate", js: "currentDate", typ: Date },
-      { json: "nextDate", js: "nextDate", typ: Date },
-      { json: "gameWeek", js: "gameWeek", typ: a(r("GameWeek")) },
-      { json: "oddsPartners", js: "oddsPartners", typ: a(r("OddsPartner")) },
-      { json: "games", js: "games", typ: a(r("Game")) },
+      { json: "prevDate", js: "prevDate", typ: u(undefined, Date) },
+      { json: "currentDate", js: "currentDate", typ: u(undefined, Date) },
+      { json: "nextDate", js: "nextDate", typ: u(undefined, Date) },
+      { json: "gameWeek", js: "gameWeek", typ: u(undefined, a(r("GameWeek"))) },
+      {
+        json: "oddsPartners",
+        js: "oddsPartners",
+        typ: u(undefined, a(r("OddsPartner"))),
+      },
+      { json: "games", js: "games", typ: u(undefined, a(r("Game"))) },
     ],
     false,
   ),
   GameWeek: o(
     [
-      { json: "date", js: "date", typ: Date },
-      { json: "dayAbbrev", js: "dayAbbrev", typ: "" },
-      { json: "numberOfGames", js: "numberOfGames", typ: 0 },
+      { json: "date", js: "date", typ: u(undefined, Date) },
+      { json: "dayAbbrev", js: "dayAbbrev", typ: u(undefined, "") },
+      { json: "numberOfGames", js: "numberOfGames", typ: u(undefined, 0) },
     ],
     false,
   ),
   Game: o(
     [
-      { json: "id", js: "id", typ: 0 },
-      { json: "season", js: "season", typ: 0 },
-      { json: "gameType", js: "gameType", typ: 0 },
-      { json: "gameDate", js: "gameDate", typ: Date },
-      { json: "venue", js: "venue", typ: r("Venue") },
-      { json: "startTimeUTC", js: "startTimeUTC", typ: Date },
-      { json: "easternUTCOffset", js: "easternUTCOffset", typ: "" },
-      { json: "venueUTCOffset", js: "venueUTCOffset", typ: "" },
-      { json: "tvBroadcasts", js: "tvBroadcasts", typ: a(r("TvBroadcast")) },
-      { json: "gameState", js: "gameState", typ: "" },
-      { json: "gameScheduleState", js: "gameScheduleState", typ: "" },
-      { json: "awayTeam", js: "awayTeam", typ: r("Team") },
-      { json: "homeTeam", js: "homeTeam", typ: r("Team") },
-      { json: "gameCenterLink", js: "gameCenterLink", typ: "" },
-      { json: "threeMinRecap", js: "threeMinRecap", typ: "" },
-      { json: "clock", js: "clock", typ: r("Clock") },
-      { json: "neutralSite", js: "neutralSite", typ: true },
-      { json: "venueTimezone", js: "venueTimezone", typ: "" },
-      { json: "period", js: "period", typ: 0 },
+      { json: "id", js: "id", typ: u(undefined, 0) },
+      { json: "season", js: "season", typ: u(undefined, 0) },
+      { json: "gameType", js: "gameType", typ: u(undefined, 0) },
+      { json: "gameDate", js: "gameDate", typ: u(undefined, Date) },
+      { json: "venue", js: "venue", typ: u(undefined, r("Venue")) },
+      { json: "startTimeUTC", js: "startTimeUTC", typ: u(undefined, Date) },
+      {
+        json: "easternUTCOffset",
+        js: "easternUTCOffset",
+        typ: u(undefined, ""),
+      },
+      { json: "venueUTCOffset", js: "venueUTCOffset", typ: u(undefined, "") },
+      {
+        json: "tvBroadcasts",
+        js: "tvBroadcasts",
+        typ: u(undefined, a(r("TvBroadcast"))),
+      },
+      { json: "gameState", js: "gameState", typ: u(undefined, "") },
+      {
+        json: "gameScheduleState",
+        js: "gameScheduleState",
+        typ: u(undefined, ""),
+      },
+      {
+        json: "awayTeam",
+        js: "awayTeam",
+        typ: u(undefined, r("GameAwayTeam")),
+      },
+      {
+        json: "homeTeam",
+        js: "homeTeam",
+        typ: u(undefined, r("GameHomeTeam")),
+      },
+      { json: "gameCenterLink", js: "gameCenterLink", typ: u(undefined, "") },
+      { json: "clock", js: "clock", typ: u(undefined, r("Clock")) },
+      { json: "neutralSite", js: "neutralSite", typ: u(undefined, true) },
+      { json: "venueTimezone", js: "venueTimezone", typ: u(undefined, "") },
+      { json: "period", js: "period", typ: u(undefined, 0) },
       {
         json: "periodDescriptor",
         js: "periodDescriptor",
-        typ: r("PeriodDescriptor"),
+        typ: u(undefined, r("PeriodDescriptor")),
       },
-      { json: "gameOutcome", js: "gameOutcome", typ: r("GameOutcome") },
-      { json: "goals", js: "goals", typ: a(r("Goal")) },
-      { json: "threeMinRecapFr", js: "threeMinRecapFr", typ: u(undefined, "") },
+      { json: "situation", js: "situation", typ: u(undefined, r("Situation")) },
+      {
+        json: "teamLeaders",
+        js: "teamLeaders",
+        typ: u(undefined, a(r("TeamLeader"))),
+      },
+      { json: "goals", js: "goals", typ: u(undefined, a(r("Goal"))) },
+      { json: "ticketsLink", js: "ticketsLink", typ: u(undefined, "") },
     ],
     false,
   ),
-  Team: o(
+  GameAwayTeam: o(
     [
-      { json: "id", js: "id", typ: 0 },
-      { json: "name", js: "name", typ: r("Venue") },
-      { json: "abbrev", js: "abbrev", typ: "" },
-      { json: "score", js: "score", typ: 0 },
-      { json: "sog", js: "sog", typ: 0 },
-      { json: "logo", js: "logo", typ: "" },
+      { json: "id", js: "id", typ: u(undefined, 0) },
+      { json: "name", js: "name", typ: u(undefined, r("AwayTeamName")) },
+      { json: "abbrev", js: "abbrev", typ: u(undefined, "") },
+      { json: "score", js: "score", typ: u(undefined, 0) },
+      { json: "sog", js: "sog", typ: u(undefined, 0) },
+      { json: "logo", js: "logo", typ: u(undefined, "") },
+      { json: "record", js: "record", typ: u(undefined, "") },
+      { json: "odds", js: "odds", typ: u(undefined, a(r("Odd"))) },
     ],
     false,
   ),
-  Venue: o([{ json: "default", js: "default", typ: "" }], false),
+  AwayTeamName: o(
+    [
+      { json: "default", js: "default", typ: u(undefined, "") },
+      { json: "fr", js: "fr", typ: u(undefined, "") },
+    ],
+    false,
+  ),
+  Odd: o(
+    [
+      { json: "providerId", js: "providerId", typ: u(undefined, 0) },
+      { json: "value", js: "value", typ: u(undefined, "") },
+    ],
+    false,
+  ),
   Clock: o(
     [
-      { json: "timeRemaining", js: "timeRemaining", typ: "" },
-      { json: "secondsRemaining", js: "secondsRemaining", typ: 0 },
-      { json: "running", js: "running", typ: true },
-      { json: "inIntermission", js: "inIntermission", typ: true },
+      { json: "timeRemaining", js: "timeRemaining", typ: u(undefined, "") },
+      {
+        json: "secondsRemaining",
+        js: "secondsRemaining",
+        typ: u(undefined, 0),
+      },
+      { json: "running", js: "running", typ: u(undefined, true) },
+      { json: "inIntermission", js: "inIntermission", typ: u(undefined, true) },
     ],
-    false,
-  ),
-  GameOutcome: o(
-    [{ json: "lastPeriodType", js: "lastPeriodType", typ: "" }],
     false,
   ),
   Goal: o(
     [
-      { json: "period", js: "period", typ: 0 },
+      { json: "period", js: "period", typ: u(undefined, 0) },
       {
         json: "periodDescriptor",
         js: "periodDescriptor",
-        typ: r("PeriodDescriptor"),
+        typ: u(undefined, r("PeriodDescriptor")),
       },
-      { json: "timeInPeriod", js: "timeInPeriod", typ: "" },
-      { json: "playerId", js: "playerId", typ: 0 },
-      { json: "name", js: "name", typ: r("Name") },
-      { json: "firstName", js: "firstName", typ: r("FirstName") },
-      { json: "lastName", js: "lastName", typ: r("Name") },
-      { json: "goalModifier", js: "goalModifier", typ: "" },
-      { json: "assists", js: "assists", typ: a(r("Assist")) },
-      { json: "mugshot", js: "mugshot", typ: "" },
-      { json: "teamAbbrev", js: "teamAbbrev", typ: "" },
-      { json: "goalsToDate", js: "goalsToDate", typ: 0 },
-      { json: "awayScore", js: "awayScore", typ: 0 },
-      { json: "homeScore", js: "homeScore", typ: 0 },
-      { json: "strength", js: "strength", typ: "" },
+      { json: "timeInPeriod", js: "timeInPeriod", typ: u(undefined, "") },
+      { json: "playerId", js: "playerId", typ: u(undefined, 0) },
+      { json: "name", js: "name", typ: u(undefined, r("Venue")) },
+      { json: "firstName", js: "firstName", typ: u(undefined, r("Venue")) },
+      { json: "lastName", js: "lastName", typ: u(undefined, r("Venue")) },
+      { json: "goalModifier", js: "goalModifier", typ: u(undefined, "") },
+      { json: "assists", js: "assists", typ: u(undefined, a(r("Assist"))) },
+      { json: "mugshot", js: "mugshot", typ: u(undefined, "") },
+      { json: "teamAbbrev", js: "teamAbbrev", typ: u(undefined, "") },
+      { json: "goalsToDate", js: "goalsToDate", typ: u(undefined, 0) },
+      { json: "awayScore", js: "awayScore", typ: u(undefined, 0) },
+      { json: "homeScore", js: "homeScore", typ: u(undefined, 0) },
+      { json: "strength", js: "strength", typ: u(undefined, "") },
       { json: "highlightClip", js: "highlightClip", typ: u(undefined, 0) },
       { json: "highlightClipFr", js: "highlightClipFr", typ: u(undefined, 0) },
     ],
@@ -541,55 +666,114 @@ const typeMap: any = {
   ),
   Assist: o(
     [
-      { json: "playerId", js: "playerId", typ: 0 },
-      { json: "name", js: "name", typ: r("Name") },
-      { json: "assistsToDate", js: "assistsToDate", typ: 0 },
+      { json: "playerId", js: "playerId", typ: u(undefined, 0) },
+      { json: "name", js: "name", typ: u(undefined, r("Venue")) },
+      { json: "assistsToDate", js: "assistsToDate", typ: u(undefined, 0) },
     ],
     false,
   ),
-  Name: o(
-    [
-      { json: "default", js: "default", typ: "" },
-      { json: "cs", js: "cs", typ: u(undefined, "") },
-      { json: "fi", js: "fi", typ: u(undefined, "") },
-      { json: "sk", js: "sk", typ: u(undefined, "") },
-    ],
-    false,
-  ),
-  FirstName: o(
-    [
-      { json: "default", js: "default", typ: "" },
-      { json: "es", js: "es", typ: u(undefined, "") },
-    ],
-    false,
-  ),
+  Venue: o([{ json: "default", js: "default", typ: u(undefined, "") }], false),
   PeriodDescriptor: o(
     [
-      { json: "number", js: "number", typ: 0 },
-      { json: "periodType", js: "periodType", typ: "" },
+      { json: "number", js: "number", typ: u(undefined, 0) },
+      { json: "periodType", js: "periodType", typ: u(undefined, "") },
+    ],
+    false,
+  ),
+  GameHomeTeam: o(
+    [
+      { json: "id", js: "id", typ: u(undefined, 0) },
+      { json: "name", js: "name", typ: u(undefined, r("Venue")) },
+      { json: "abbrev", js: "abbrev", typ: u(undefined, "") },
+      { json: "score", js: "score", typ: u(undefined, 0) },
+      { json: "sog", js: "sog", typ: u(undefined, 0) },
+      { json: "logo", js: "logo", typ: u(undefined, "") },
+      { json: "record", js: "record", typ: u(undefined, "") },
+      { json: "odds", js: "odds", typ: u(undefined, a(r("Odd"))) },
+    ],
+    false,
+  ),
+  Situation: o(
+    [
+      {
+        json: "homeTeam",
+        js: "homeTeam",
+        typ: u(undefined, r("SituationHomeTeam")),
+      },
+      {
+        json: "awayTeam",
+        js: "awayTeam",
+        typ: u(undefined, r("SituationAwayTeam")),
+      },
+      { json: "situationCode", js: "situationCode", typ: u(undefined, "") },
+      { json: "timeRemaining", js: "timeRemaining", typ: u(undefined, "") },
+      {
+        json: "secondsRemaining",
+        js: "secondsRemaining",
+        typ: u(undefined, 0),
+      },
+    ],
+    false,
+  ),
+  SituationAwayTeam: o(
+    [
+      { json: "abbrev", js: "abbrev", typ: u(undefined, "") },
+      { json: "strength", js: "strength", typ: u(undefined, 0) },
+    ],
+    false,
+  ),
+  SituationHomeTeam: o(
+    [
+      { json: "abbrev", js: "abbrev", typ: u(undefined, "") },
+      {
+        json: "situationDescriptions",
+        js: "situationDescriptions",
+        typ: u(undefined, a("")),
+      },
+      { json: "strength", js: "strength", typ: u(undefined, 0) },
+    ],
+    false,
+  ),
+  TeamLeader: o(
+    [
+      { json: "id", js: "id", typ: u(undefined, 0) },
+      { json: "name", js: "name", typ: u(undefined, r("TeamLeaderName")) },
+      { json: "headshot", js: "headshot", typ: u(undefined, "") },
+      { json: "teamAbbrev", js: "teamAbbrev", typ: u(undefined, "") },
+      { json: "category", js: "category", typ: u(undefined, "") },
+      { json: "value", js: "value", typ: u(undefined, 0) },
+    ],
+    false,
+  ),
+  TeamLeaderName: o(
+    [
+      { json: "default", js: "default", typ: u(undefined, "") },
+      { json: "cs", js: "cs", typ: u(undefined, "") },
+      { json: "sk", js: "sk", typ: u(undefined, "") },
+      { json: "fi", js: "fi", typ: u(undefined, "") },
     ],
     false,
   ),
   TvBroadcast: o(
     [
-      { json: "id", js: "id", typ: 0 },
-      { json: "market", js: "market", typ: "" },
-      { json: "countryCode", js: "countryCode", typ: "" },
-      { json: "network", js: "network", typ: "" },
-      { json: "sequenceNumber", js: "sequenceNumber", typ: 0 },
+      { json: "id", js: "id", typ: u(undefined, 0) },
+      { json: "market", js: "market", typ: u(undefined, "") },
+      { json: "countryCode", js: "countryCode", typ: u(undefined, "") },
+      { json: "network", js: "network", typ: u(undefined, "") },
+      { json: "sequenceNumber", js: "sequenceNumber", typ: u(undefined, 0) },
     ],
     false,
   ),
   OddsPartner: o(
     [
-      { json: "partnerId", js: "partnerId", typ: 0 },
-      { json: "country", js: "country", typ: "" },
-      { json: "name", js: "name", typ: "" },
-      { json: "imageUrl", js: "imageUrl", typ: "" },
+      { json: "partnerId", js: "partnerId", typ: u(undefined, 0) },
+      { json: "country", js: "country", typ: u(undefined, "") },
+      { json: "name", js: "name", typ: u(undefined, "") },
+      { json: "imageUrl", js: "imageUrl", typ: u(undefined, "") },
       { json: "siteUrl", js: "siteUrl", typ: u(undefined, "") },
-      { json: "bgColor", js: "bgColor", typ: "" },
-      { json: "textColor", js: "textColor", typ: "" },
-      { json: "accentColor", js: "accentColor", typ: "" },
+      { json: "bgColor", js: "bgColor", typ: u(undefined, "") },
+      { json: "textColor", js: "textColor", typ: u(undefined, "") },
+      { json: "accentColor", js: "accentColor", typ: u(undefined, "") },
     ],
     false,
   ),
