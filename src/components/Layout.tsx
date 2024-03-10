@@ -6,6 +6,7 @@ import { cn } from "~/lib/utils";
 import { Toaster } from "./ui/toaster";
 import { Button } from "./ui/button";
 import { LuMenu } from "react-icons/lu";
+import ScrollToTopButton from "./scrolltotop";
 
 type LayoutProps = {
   pageTitle: string;
@@ -31,6 +32,7 @@ const Layout = ({
           "-z-50 min-h-screen w-screen max-w-full scroll-smooth text-white",
         )}
       >
+        <ScrollToTopButton />
         <div className="h-full pt-5">
           <div className="relative">
             <Image
