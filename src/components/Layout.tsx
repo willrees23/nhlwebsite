@@ -26,7 +26,11 @@ const Layout = ({
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <main className={cn("-z-50 min-h-screen w-screen max-w-full text-white")}>
+      <main
+        className={cn(
+          "-z-50 min-h-screen w-screen max-w-full scroll-smooth text-white",
+        )}
+      >
         <div className="h-full pt-5">
           <div className="relative">
             <Image
