@@ -100,17 +100,37 @@ function timeOfDay(date: Date) {
   });
 }
 
+function dateIsYesterday(date: Date) {
+  dayjs.extend(isYesterday);
+  const dateJs = dayjs(date);
+  return dateJs.isYesterday();
+}
+
+function dateIsTomorrow(date: Date) {
+  dayjs.extend(isTomorrow);
+  const dateJs = dayjs(date);
+  return dateJs.isTomorrow();
+}
+
+function dateIsToday(date: Date) {
+  dayjs.extend(isToday);
+  const dateJs = dayjs(date);
+  return dateJs.isToday();
+}
+
 function dayOfWeekNumOfMonth(date: Date) {
-  // should return Monday 1st, Tuesday 2nd, etc.
-  const now = new Date();
-  if (now.getDate() - 1 === date.getDate()) {
-    return "Yesterday";
-  }
-  if (now.getDate() === date.getDate()) {
+  dayjs.extend(isToday);
+  dayjs.extend(isTomorrow);
+  dayjs.extend(isYesterday);
+  const dateJs = dayjs(date);
+  if (dateJs.isToday()) {
     return "Today";
   }
-  if (now.getDate() + 1 === date.getDate()) {
+  if (dateJs.isTomorrow()) {
     return "Tomorrow";
+  }
+  if (dateJs.isYesterday()) {
+    return "Yesterday";
   }
   return (
     date.toLocaleDateString(navigator.language, {
@@ -136,6 +156,9 @@ function goalStrengthFormatted(strength: string) {
 }
 
 export {
+  dateIsToday,
+  dateIsTomorrow,
+  dateIsYesterday,
   goalStrengthFormatted,
   getDateInAmericanFormat,
   nthalize,

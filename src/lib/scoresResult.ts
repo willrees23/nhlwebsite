@@ -49,6 +49,27 @@ export type Game = {
   gameOutcome: GameOutcome;
   goals: Goal[];
   threeMinRecapFr?: string;
+  situation?: Situation;
+};
+
+export type Situation = {
+  homeTeam: SituationHomeTeam;
+  awayTeam: SituationAwayTeam;
+  situationCode: string;
+  timeRemaining: string;
+  secondsRemaining: number;
+};
+
+export type SituationAwayTeam = {
+  abbrev: string;
+  situationDescriptions: string[];
+  strength: number;
+};
+
+export type SituationHomeTeam = {
+  abbrev: string;
+  situationDescriptions: string[];
+  strength: number;
 };
 
 export type Team = {
