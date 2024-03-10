@@ -5,16 +5,22 @@ import { nhlFont } from "~/lib/fonts";
 import { cn } from "~/lib/utils";
 import { Toaster } from "./ui/toaster";
 import { Button } from "./ui/button";
-import { MenuIcon } from "lucide-react";
+import { LuMenu } from "react-icons/lu";
 
 type LayoutProps = {
   pageTitle: string;
+  showPageTitle?: boolean;
   // children is collection of JSX elements, not just React.ReactNode
   children?: React.ReactNode;
   loading?: boolean;
 };
 
-const Layout = ({ pageTitle, children, loading = false }: LayoutProps) => {
+const Layout = ({
+  pageTitle,
+  showPageTitle = true,
+  children,
+  loading = false,
+}: LayoutProps) => {
   return (
     <>
       <Head>
@@ -61,16 +67,24 @@ const Layout = ({ pageTitle, children, loading = false }: LayoutProps) => {
                   STANDINGS
                 </Link>
                 <Button className="border p-2 sm:hidden">
-                  <MenuIcon size={32} />
+                  <LuMenu size={32} />
                 </Button>
               </div>
             </div>
-            <h1
-              className={`font-nhl ${nhlFont.variable} mb-10 mt-32 cursor-default text-center text-5xl transition-all hover:tracking-wider`}
+            {showPageTitle && (
+              <h1
+                className={`font-nhl ${nhlFont.variable} mb-10 mt-32 cursor-default text-center text-5xl transition-all hover:tracking-wider`}
+              >
+                {pageTitle.toUpperCase()}
+              </h1>
+            )}
+            <div
+              className={cn("flex w-full flex-col items-center", {
+                "mt-32": !showPageTitle,
+              })}
             >
-              {pageTitle.toUpperCase()}
-            </h1>
-            <div className="flex w-full flex-col items-center">{children}</div>
+              {children}
+            </div>
           </div>
         </div>
       </main>

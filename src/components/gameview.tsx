@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from "lucide-react";
+import { LuExternalLink } from "react-icons/lu";
 import Image from "next/image";
 import Link from "next/link";
 import { nhlFont } from "~/lib/fonts";
@@ -221,7 +221,7 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
         href={`https://nhl.com${game.gameCenterLink}`}
         target="_blank"
       >
-        <ExternalLinkIcon size={16} />
+        <LuExternalLink size={16} />
         <h1 className="text-lg">GAME OVERVIEW</h1>
       </Link>
       <Link
@@ -229,7 +229,7 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
         href={`https://nhl.com${game.threeMinRecap}`}
         target="_blank"
       >
-        <ExternalLinkIcon size={16} />
+        <LuExternalLink size={16} />
         <h1 className="text-lg">GAME RECAP</h1>
       </Link>
 
