@@ -134,24 +134,25 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
         className="text-md flex items-center justify-center"
         state={game.gameState.toString()}
       />
-      {game.clock.inIntermission ? (
-        <h1
-          className={`font-nhl ${nhlFont.variable} mt-2 text-2xl font-extralight`}
-        >
-          INTERMISSION
-        </h1>
-      ) : (
-        <h1 className={`mt-2 font-mono font-extralight`}>
-          {game.clock.timeRemaining} | {nthalize(game.periodDescriptor.number)}{" "}
-          Period (
-          {game.periodDescriptor.periodType === "REG"
-            ? "Regulation"
-            : game.periodDescriptor.periodType === "OT"
-              ? "Overtime"
-              : "Shootout"}
-          )
-        </h1>
-      )}
+      {game.clock &&
+        (game.clock.inIntermission ? (
+          <h1
+            className={`font-nhl ${nhlFont.variable} mt-2 text-2xl font-extralight`}
+          >
+            INTERMISSION
+          </h1>
+        ) : (
+          <h1 className={`mt-2 font-mono font-extralight`}>
+            {game.clock.timeRemaining} |{" "}
+            {nthalize(game.periodDescriptor.number)} Period (
+            {game.periodDescriptor.periodType === "REG"
+              ? "Regulation"
+              : game.periodDescriptor.periodType === "OT"
+                ? "Overtime"
+                : "Shootout"}
+            )
+          </h1>
+        ))}
       {game.situation && (
         <h1 className="mt-1">
           {game.situation.awayTeam.strength} on{" "}
@@ -234,24 +235,28 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
       </Link>
 
       <div className="mt-10 w-2/5 ">
-        <h1 className={"text-center text-3xl tracking-wide " + nhlClass()}>
-          GOALS
-        </h1>
-        <div className="mt-5 flex w-full flex-col gap-x-14 rounded-md max-lg:items-center lg:grid lg:grid-cols-11 lg:justify-center">
-          <div className="flex w-52 flex-col items-start gap-y-[5px] lg:col-span-5">
-            <h1 className="font-bold">Scorers</h1>
-            {game.goals.map((goal, index) => (
-              <GoalView side="away" key={index} goal={goal} />
-            ))}
-          </div>
-          <h1 className="col-span-1 mt-10 font-bold"></h1>
-          <div className="flex w-52 flex-col items-end gap-y-[5px] lg:col-span-5">
-            <h1 className="font-bold">Scorers</h1>
-            {game.goals.map((goal, index) => (
-              <GoalView side="home" key={index} goal={goal} />
-            ))}
-          </div>
-        </div>
+        {game.goals && (
+          <>
+            <h1 className={"text-center text-3xl tracking-wide " + nhlClass()}>
+              GOALS
+            </h1>
+            <div className="mt-5 flex w-full flex-col gap-x-14 rounded-md max-lg:items-center lg:grid lg:grid-cols-11 lg:justify-center">
+              <div className="flex w-52 flex-col items-start gap-y-[5px] lg:col-span-5">
+                <h1 className="font-bold">Scorers</h1>
+                {game.goals.map((goal, index) => (
+                  <GoalView side="away" key={index} goal={goal} />
+                ))}
+              </div>
+              <h1 className="col-span-1 mt-10 font-bold"></h1>
+              <div className="flex w-52 flex-col items-end gap-y-[5px] lg:col-span-5">
+                <h1 className="font-bold">Scorers</h1>
+                {game.goals.map((goal, index) => (
+                  <GoalView side="home" key={index} goal={goal} />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
