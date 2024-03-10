@@ -17,11 +17,7 @@ export const postRouter = createTRPCRouter({
       };
     }),
   scheduleNow: publicProcedure.query(async () => {
-    const lastSundayString = getLastSunday();
-
-    const data = httpGet(
-      "https://api-web.nhle.com/v1/schedule/" + lastSundayString,
-    );
+    const data = httpGet("https://api-web.nhle.com/v1/schedule/" + "now");
 
     return data;
   }),
