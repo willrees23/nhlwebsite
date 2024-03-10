@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import Layout from "~/components/Layout";
@@ -23,23 +24,29 @@ const GamePage = () => {
     return <LoadingPage />;
   }
 
-  console.log(scoresNow.data);
-
   const scoresJsonString = JSON.stringify(scoresNow.data, null, 2);
   const nhlScores = ScoresConvert.toScoresResult(scoresJsonString);
 
   return (
     <>
       <Layout pageTitle="Game View">
-        <Button
-          className="mb-2 bg-transparent"
-          onClick={() => {
-            void scoresNow.refetch();
-          }}
-          variant={"outline"}
-        >
-          {scoresNow.isFetching ? "Refreshing..." : "Refresh"}
-        </Button>
+        <div className="flex space-x-2">
+          <Link href={"/schedule"}>
+            <Button className="mb-2 bg-transparent" variant={"outline"}>
+              Back to schedule
+            </Button>
+          </Link>
+          <Button
+            className="mb-2 bg-transparent"
+            onClick={() => {
+              void scoresNow.refetch();
+            }}
+            variant={"outline"}
+          >
+            {scoresNow.isFetching ? "Refreshing..." : "Refresh Info"}
+          </Button>
+        </div>
+
         <div className="flex w-full justify-center p-3">
           <div className="flex min-h-fit w-10/12 flex-col items-center rounded-lg bg-opacity-20">
             <GameView
