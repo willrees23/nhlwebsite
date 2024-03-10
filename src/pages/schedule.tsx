@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { ToastAction } from "@radix-ui/react-toast";
+
+import Link from "next/link";
+import Layout from "~/components/Layout";
+import GameCell from "~/components/gamecell";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-import Image from "next/image";
-import Link from "next/link";
-import Layout from "~/components/Layout";
-import StateBadge from "~/components/statebadge";
+} from "~/components/ui/tooltip";
 import { useToast } from "~/components/ui/use-toast";
-import { Convert as ResultConvert } from "~/lib/nhlresult";
 import {
-  cn,
-  dateIsToday,
-  dateIsYesterday,
-  dayOfWeekNumOfMonth,
-  getDateInAmericanFormat,
-  getLastSundayDate,
-  getUntil,
-} from "~/lib/utils";
+  Convert as ResultConvert,
+  type Game,
+  type GameWeek,
+} from "~/lib/nhlresult";
+import { getLastSundayDate } from "~/lib/utils";
 import { api } from "~/utils/api";
+
+type GameCellInfo = {
+  game: Game;
+  day: GameWeek;
+};
 
 const SchedulePage = () => {
   const scheduleNow = api.post.scheduleNow.useQuery();
@@ -42,6 +42,28 @@ const SchedulePage = () => {
   const jsonString = JSON.stringify(scheduleNow.data, null, 2);
   const nhlResults = ResultConvert.toNhlResult(jsonString);
 
+  const critGames: GameCellInfo[] = [];
+  const liveGames: GameCellInfo[] = [];
+  const preGames: GameCellInfo[] = [];
+  const futGames: GameCellInfo[] = [];
+  const offGames: GameCellInfo[] = [];
+
+  nhlResults.gameWeek.forEach((day) => {
+    day.games.forEach((game) => {
+      if (game.gameState === "CRIT") {
+        critGames.push({ game: game, day: day });
+      } else if (game.gameState === "LIVE") {
+        liveGames.push({ game: game, day: day });
+      } else if (game.gameState === "PRE") {
+        preGames.push({ game: game, day: day });
+      } else if (game.gameState === "FUT") {
+        futGames.push({ game: game, day: day });
+      } else if (game.gameState === "OFF") {
+        offGames.push({ game: game, day: day });
+      }
+    });
+  });
+
   return (
     <Layout pageTitle="NHL Game Schedule">
       <h1 className="mb-5 text-xl">
@@ -53,7 +75,7 @@ const SchedulePage = () => {
                 {getLastSundayDate().toDateString()}
               </span>
             </TooltipTrigger>
-            <TooltipContent className="border-0 bg-zinc-700 text-white">
+            <TooltipContent className="border-zinc-800 bg-zinc-700 text-white">
               <div className="rounded-lg">
                 <h1>
                   The schedule is from the last Sunday to the next Saturday.
@@ -63,123 +85,75 @@ const SchedulePage = () => {
           </Tooltip>
         </TooltipProvider>
       </h1>
+      <div className="*:animate-underline mb-10 mt-6 flex flex-col items-center justify-center space-x-3 rounded-md border p-6 text-xl *:text-center md:flex-row">
+        <Link href={"#live"} className="text-blue-500 ">
+          LIVE
+        </Link>
+        <span>|</span>
+        <Link href={"#final"} className="text-blue-500 ">
+          FINAL MINUTES
+        </Link>
+        <span>|</span>
+        <Link href={"#soon"} className="text-blue-500 ">
+          STARTING SOON
+        </Link>
+        <span>|</span>
+        <Link href={"#sched"} className="text-blue-500 ">
+          SCHEDULED
+        </Link>
+        <span>|</span>
+        <Link href={"#concl"} className="text-blue-500 ">
+          CONCLUDED
+        </Link>
+      </div>
+      <h1 className="mb-3 mt-5 text-3xl" id="live">
+        Live Games
+      </h1>
       <div className="flex w-full justify-center">
         <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-          {nhlResults.gameWeek.map((day, index) =>
-            day.games.map((game, index) => (
-              <>
-                <Link
-                  key={game.id}
-                  scroll={false}
-                  href={
-                    game.gameState === "FUT" || game.gameState === "PRE"
-                      ? ""
-                      : "/game/" +
-                        game.id +
-                        "?date=" +
-                        getDateInAmericanFormat(day.date)
-                  }
-                >
-                  <div
-                    className={cn(
-                      "max-w-72 rounded-lg border bg-[#181818] bg-opacity-20 p-2 py-3 transition-all hover:scale-[1.025] hover:bg-opacity-100",
-                      game.gameState === "LIVE"
-                        ? "border-green-500"
-                        : "border-zinc-700",
-                    )}
-                    onClick={() => {
-                      if (
-                        game.gameState === "FUT" ||
-                        game.gameState === "PRE"
-                      ) {
-                        toast({
-                          title: "Game scheduled!",
-                          description:
-                            "You can view the game when it starts. Keep your eyes peeled! 🏒",
-                          className:
-                            "text-white bg-zinc-800 pointer-events-auto border-zinc-700 p-3 px-4",
-                          action: (
-                            <ToastAction
-                              altText="Dismiss "
-                              className="rounded-xl bg-zinc-700 p-2 py-1 text-white"
-                            >
-                              Dismiss
-                            </ToastAction>
-                          ),
-                        });
-                      }
-                    }}
-                  >
-                    <div className="grid grid-cols-1 items-center justify-between gap-y-2 *:flex *:items-center *:justify-evenly">
-                      <div className="mb-2">
-                        <StateBadge state={game.gameState.toString()} />
-                      </div>
-                      <div className="flex gap-x-2">
-                        <Image
-                          alt="AwayTeamLogo"
-                          className="size-20"
-                          width={50}
-                          height={50}
-                          src={game.awayTeam.logo}
-                        />
-                        <h1>@</h1>
-                        <Image
-                          alt="HomeTeamLogo"
-                          className="size-20"
-                          width={50}
-                          height={50}
-                          src={game.homeTeam.logo}
-                        />
-                      </div>
-                      <div>
-                        <h1>{game.awayTeam.placeName.default}</h1>
-                        <h1> </h1>
-                        <h1>{game.homeTeam.placeName.default}</h1>
-                      </div>
-                      <div>
-                        {game.gameState === "LIVE" ||
-                        game.gameState === "CRIT" ? (
-                          <h1>
-                            <span className="font-bold">Live score:</span>{" "}
-                            {game.awayTeam.score} - {game.homeTeam.score}
-                          </h1>
-                        ) : game.gameState === "FUT" ? (
-                          dateIsToday(day.date) || dateIsYesterday(day.date) ? (
-                            <h1>
-                              <span className="font-bold">Scheduled:</span>{" "}
-                              {getUntil(game.startTimeUTC)}
-                            </h1>
-                          ) : (
-                            <h1>
-                              <span className="font-bold">Scheduled:</span>{" "}
-                              {game.startTimeUTC.toLocaleTimeString()}
-                            </h1>
-                          )
-                        ) : game.gameState === "PRE" ? (
-                          <h1>
-                            <span className="font-bold">Starting Soon:</span>{" "}
-                            {getUntil(game.startTimeUTC, true)}
-                          </h1>
-                        ) : (
-                          <h1>
-                            <span className="font-bold">Concluded:</span>{" "}
-                            {game.awayTeam.score} - {game.homeTeam.score}
-                          </h1>
-                        )}
-                      </div>
-                      <div>
-                        <h1>
-                          {dayOfWeekNumOfMonth(day.date)}
-                          {" | "}
-                          {day.date.toLocaleDateString()}
-                        </h1>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </>
-            )),
-          )}
+          {liveGames.map((gameStuff) => (
+            <GameCell key={gameStuff.game.id} info={gameStuff} />
+          ))}
+        </div>
+      </div>
+      <h1 className="mb-3 mt-16 text-3xl" id="final">
+        Final Minutes
+      </h1>
+      <div className="flex w-full justify-center">
+        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          {critGames.map((gameStuff) => (
+            <GameCell key={gameStuff.game.id} info={gameStuff} />
+          ))}
+        </div>
+      </div>
+      <h1 className="mb-3 mt-16 text-3xl" id="soon">
+        Starting Soon
+      </h1>
+      <div className="flex w-full justify-center">
+        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          {preGames.map((gameStuff) => (
+            <GameCell key={gameStuff.game.id} info={gameStuff} />
+          ))}
+        </div>
+      </div>
+      <h1 className="mb-3 mt-16  text-3xl" id="sched">
+        Scheduled
+      </h1>
+      <div className="flex w-full justify-center">
+        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          {futGames.map((gameStuff) => (
+            <GameCell key={gameStuff.game.id} info={gameStuff} />
+          ))}
+        </div>
+      </div>
+      <h1 className="mb-3 mt-16  text-3xl" id="concl">
+        Concluded
+      </h1>
+      <div className="flex w-full justify-center">
+        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          {offGames.map((gameStuff) => (
+            <GameCell key={gameStuff.game.id} info={gameStuff} />
+          ))}
         </div>
       </div>
     </Layout>
@@ -187,3 +161,4 @@ const SchedulePage = () => {
 };
 
 export default SchedulePage;
+export type { GameCellInfo };
