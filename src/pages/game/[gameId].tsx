@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import Layout from "~/components/Layout";
-import { api } from "~/utils/api";
-import { Convert as ScoresConvert } from "~/lib/scoresResult";
 import GameView from "~/components/gameview";
-import { useSearchParams } from "next/navigation";
 import LoadingPage from "~/components/loading";
 import { Button } from "~/components/ui/button";
+import { Convert as ScoresConvert } from "~/lib/scoresResult";
+import { api } from "~/utils/api";
 
 const GamePage = () => {
   const router = useRouter();

@@ -8,20 +8,14 @@ import {
   type Goal,
   type ScoresResult,
 } from "~/lib/scoresResult";
-import {
-  cn,
-  getLastSundayDate,
-  goalStrengthFormatted,
-  nhlClass,
-  nthalize,
-} from "~/lib/utils";
+import { cn, goalStrengthFormatted, nhlClass, nthalize } from "~/lib/utils";
+import StateBadge from "./statebadge";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import StateBadge from "./statebadge";
 
 type GameViewProps = {
   // tRPC useQuery

@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { ToastAction } from "@radix-ui/react-toast";
 import {
-  TooltipProvider,
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { toast } from "sonner";
+import Image from "next/image";
+import Link from "next/link";
+import Layout from "~/components/Layout";
 import StateBadge from "~/components/statebadge";
 import { useToast } from "~/components/ui/use-toast";
+import { Convert as ResultConvert } from "~/lib/nhlresult";
 import {
-  getLastSundayDate,
-  getDateInAmericanFormat,
   cn,
   dayOfWeekNumOfMonth,
+  getDateInAmericanFormat,
+  getLastSundayDate,
   getUntil,
 } from "~/lib/utils";
 import { api } from "~/utils/api";
-import { Convert as ResultConvert } from "~/lib/nhlresult";
-import Layout from "~/components/Layout";
-import Link from "next/link";
-import Image from "next/image";
 
 const SchedulePage = () => {
   const scheduleNow = api.post.scheduleNow.useQuery();
