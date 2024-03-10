@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Layout from "~/components/Layout";
 import GameCell from "~/components/gamecell";
-import ScrollToTopButton from "~/components/scrolltotop";
 import {
   Tooltip,
   TooltipContent,
