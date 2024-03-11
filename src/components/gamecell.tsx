@@ -33,7 +33,7 @@ const GameCell = ({ info }: GameCellProps) => {
       >
         <div
           className={cn(
-            "max-w-72 rounded-lg border bg-[#181818] bg-opacity-20 p-2 py-3 transition-all hover:scale-[1.025] hover:bg-opacity-100",
+            "rounded-lg border bg-[#181818] bg-opacity-20 p-2 py-3 transition-all hover:scale-[1.025] hover:bg-opacity-100",
             game.gameState === "LIVE" ? "border-green-500" : "border-zinc-700",
           )}
           //   onClick={() => {

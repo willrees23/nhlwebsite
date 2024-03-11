@@ -92,7 +92,7 @@ const SchedulePage = () => {
         Live Games
       </h1>
       <div className="flex w-full justify-center">
-        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        <div className="grid w-10/12 justify-center gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {liveGames.map((gameStuff) => (
             <GameCell key={gameStuff.game.id} info={gameStuff} />
           ))}
@@ -102,7 +102,7 @@ const SchedulePage = () => {
         Final Minutes
       </h1>
       <div className="flex w-full justify-center">
-        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        <div className="grid w-10/12 justify-center gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {critGames.map((gameStuff) => (
             <GameCell key={gameStuff.game.id} info={gameStuff} />
           ))}
@@ -112,7 +112,7 @@ const SchedulePage = () => {
         Starting Soon
       </h1>
       <div className="flex w-full justify-center">
-        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        <div className="grid w-10/12 justify-center gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {preGames.map((gameStuff) => (
             <GameCell key={gameStuff.game.id} info={gameStuff} />
           ))}
@@ -122,7 +122,7 @@ const SchedulePage = () => {
         Scheduled
       </h1>
       <div className="flex w-full justify-center">
-        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        <div className="grid w-10/12 justify-center gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {futGames.map((gameStuff) => (
             <GameCell key={gameStuff.game.id} info={gameStuff} />
           ))}
@@ -132,7 +132,7 @@ const SchedulePage = () => {
         Concluded
       </h1>
       <div className="flex w-full justify-center">
-        <div className="grid w-10/12 justify-center gap-y-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        <div className="grid w-10/12 justify-center gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {offGames.map((gameStuff) => (
             <GameCell key={gameStuff.game.id} info={gameStuff} />
           ))}
