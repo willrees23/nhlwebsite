@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 
 import Link from "next/link";
+import { useRef } from "react";
 import Layout from "~/components/Layout";
 import { DatePickerWithRange } from "~/components/datepicker";
 import GameCell from "~/components/gamecell";
@@ -28,6 +29,12 @@ const SchedulePage = () => {
   const scheduleNow = api.post.scheduleNow.useQuery();
 
   const { toast } = useToast();
+
+  const liveRef = useRef<HTMLDivElement | null>(null);
+  const finalRef = useRef<HTMLDivElement | null>(null);
+  const soonRef = useRef<HTMLDivElement | null>(null);
+  const schedRef = useRef<HTMLDivElement | null>(null);
+  const conclRef = useRef<HTMLDivElement | null>(null);
 
   if (scheduleNow.error || scheduleNow.data === undefined) {
     return (
@@ -68,27 +75,52 @@ const SchedulePage = () => {
       <h1 className="mb-5 text-xl">Show games between</h1>
       <DatePickerWithRange />
       <div className="*:animate-underline mb-10 mt-6 flex flex-col items-center justify-center space-x-3 rounded-md border p-6 text-xl *:text-center md:flex-row">
-        <Link href={"#live"} className="text-blue-500 ">
+        <button
+          className="text-blue-500"
+          onClick={() => {
+            liveRef.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
           LIVE
-        </Link>
+        </button>
         <span>|</span>
-        <Link href={"#final"} className="text-blue-500 ">
+        <button
+          className="text-blue-500"
+          onClick={() => {
+            finalRef.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
           FINAL MINUTES
-        </Link>
+        </button>
         <span>|</span>
-        <Link href={"#soon"} className="text-blue-500 ">
+        <button
+          className="text-blue-500 "
+          onClick={() => {
+            soonRef.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
           STARTING SOON
-        </Link>
+        </button>
         <span>|</span>
-        <Link href={"#sched"} className="text-blue-500 ">
+        <button
+          className="text-blue-500 "
+          onClick={() => {
+            schedRef.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
           SCHEDULED
-        </Link>
+        </button>
         <span>|</span>
-        <Link href={"#concl"} className="text-blue-500 ">
+        <button
+          className="text-blue-500 "
+          onClick={() => {
+            conclRef.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
           CONCLUDED
-        </Link>
+        </button>
       </div>
-      <h1 className="mb-3 mt-5 text-3xl" id="live">
+      <h1 className="mb-3 mt-5 text-3xl" ref={liveRef}>
         Live Games
       </h1>
       <div className="flex w-full justify-center">
@@ -98,7 +130,7 @@ const SchedulePage = () => {
           ))}
         </div>
       </div>
-      <h1 className="mb-3 mt-16 text-3xl" id="final">
+      <h1 className="mb-3 mt-16 text-3xl" ref={finalRef}>
         Final Minutes
       </h1>
       <div className="flex w-full justify-center">
@@ -108,7 +140,7 @@ const SchedulePage = () => {
           ))}
         </div>
       </div>
-      <h1 className="mb-3 mt-16 text-3xl" id="soon">
+      <h1 className="mb-3 mt-16 text-3xl" ref={soonRef}>
         Starting Soon
       </h1>
       <div className="flex w-full justify-center">
@@ -118,7 +150,7 @@ const SchedulePage = () => {
           ))}
         </div>
       </div>
-      <h1 className="mb-3 mt-16  text-3xl" id="sched">
+      <h1 className="mb-3 mt-16  text-3xl" ref={schedRef}>
         Scheduled
       </h1>
       <div className="flex w-full justify-center">
@@ -128,7 +160,7 @@ const SchedulePage = () => {
           ))}
         </div>
       </div>
-      <h1 className="mb-3 mt-16  text-3xl" id="concl">
+      <h1 className="mb-3 mt-16  text-3xl" ref={conclRef}>
         Concluded
       </h1>
       <div className="flex w-full justify-center">
