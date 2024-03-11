@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Layout from "~/components/Layout";
+import { DatePickerWithRange } from "~/components/datepicker";
 import GameCell from "~/components/gamecell";
 import {
   Tooltip,
@@ -36,8 +37,6 @@ const SchedulePage = () => {
     );
   }
 
-  console.log(scheduleNow.data);
-
   // scheduleNow is JSON, so change it to string
   const jsonString = JSON.stringify(scheduleNow.data, null, 2);
   const nhlResults = ResultConvert.toNhlResult(jsonString);
@@ -66,25 +65,8 @@ const SchedulePage = () => {
 
   return (
     <Layout pageTitle="NHL Game Schedule">
-      <h1 className="mb-5 text-xl">
-        Schedule from{" "}
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <span className=" rounded-lg bg-zinc-800 px-[6px] py-[2px] font-bold">
-                {getLastSundayDate().toDateString()}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent className="border-zinc-800 bg-zinc-700 text-white">
-              <div className="rounded-lg">
-                <h1>
-                  The schedule is from the last Sunday to the next Saturday.
-                </h1>
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </h1>
+      <h1 className="mb-5 text-xl">Show games between</h1>
+      <DatePickerWithRange />
       <div className="*:animate-underline mb-10 mt-6 flex flex-col items-center justify-center space-x-3 rounded-md border p-6 text-xl *:text-center md:flex-row">
         <Link href={"#live"} className="text-blue-500 ">
           LIVE

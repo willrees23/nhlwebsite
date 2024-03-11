@@ -8,7 +8,13 @@ import {
   type Goal,
   type ScoresResult,
 } from "~/lib/scoresResult";
-import { cn, goalStrengthFormatted, nhlClass, nthalize } from "~/lib/utils";
+import {
+  cn,
+  getUntil,
+  goalStrengthFormatted,
+  nhlClass,
+  nthalize,
+} from "~/lib/utils";
 import StateBadge from "./statebadge";
 import {
   Tooltip,
@@ -16,6 +22,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { api } from "~/utils/api";
+import { PlayerConverter } from "~/lib/playerinfo";
 
 type GameViewProps = {
   // tRPC useQuery
@@ -53,11 +61,23 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
     side?: "away" | "home";
   };
 
+  const PlayerAssistNumber = ({ playerId }: { playerId: number }) => {
+    const playerInfo = api.post.playerInfo.useQuery(playerId.toString());
+    if (playerInfo.error ?? playerInfo.data === undefined) {
+      return <span></span>;
+    }
+    const playerJsonString = JSON.stringify(playerInfo.data, null, 2);
+    const player = PlayerConverter.toPlayerInfo(playerJsonString);
+    return player.sweaterNumber;
+  };
+
   const GoalViewInfo = ({ goal, side }: GoalViewProps) => {
     return (
       <div className="flex flex-col">
         <div className="flex flex-row space-x-2">
-          <h1 className="overflow-ellipsis text-nowrap">{goal.name.default}</h1>
+          <h1 className="overflow-ellipsis text-nowrap">
+            <span>{goal.name.default}</span>
+          </h1>
           <div>
             <TooltipProvider>
               <Tooltip>
@@ -75,6 +95,23 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
             </TooltipProvider>
           </div>
         </div>
+        <h1
+          className={cn(
+            "overflow-ellipsis text-nowrap text-sm",
+            side ? (side == "away" ? "text-start" : "text-end") : "text-center",
+          )}
+        >
+          {goal.assists.length > 0 ? (
+            goal.assists.map((assist, index) => (
+              <span key={index}>
+                #{PlayerAssistNumber({ playerId: assist.playerId })}{" "}
+                {index + 1 < goal.assists.length && " & "}
+              </span>
+            ))
+          ) : (
+            <span>Unassisted</span>
+          )}
+        </h1>
         <h1
           className={cn(
             "text-sm",
@@ -95,9 +132,9 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
               <div className="flex gap-x-2">
                 <div className="overflow-clip rounded-2xl bg-neutral-800 p-[1px]">
                   <Image
-                    width={45}
-                    height={45}
-                    className="min-h-[45px] min-w-[45px]"
+                    width={60}
+                    height={60}
+                    className="min-h-[60px] min-w-[60px]"
                     src={goal.mugshot}
                     priority
                     alt="PlayerMugshot"
@@ -111,8 +148,9 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
                 <GoalViewInfo goal={goal} side={side} />
                 <div className="overflow-clip rounded-2xl bg-neutral-800 p-[1px]">
                   <Image
-                    width={45}
-                    height={45}
+                    width={60}
+                    height={60}
+                    className="min-h-[60px] min-w-[60px]"
                     src={goal.mugshot}
                     priority
                     alt="PlayerMugshot"
@@ -134,12 +172,18 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
         className="text-md flex items-center justify-center"
         state={game.gameState.toString()}
       />
+      {game.gameState === "PRE" || game.gameState === "FUT" ? (
+        <h1 className="mt-5 text-2xl font-bold">
+          Starting {getUntil(game.startTimeUTC)}
+        </h1>
+      ) : (
+        <span></span>
+      )}
       {game.clock &&
         (game.clock.inIntermission ? (
-          <h1
-            className={`font-nhl ${nhlFont.variable} mt-2 text-2xl font-extralight`}
-          >
-            INTERMISSION
+          <h1 className={`mt-2 text-2xl font-semibold`}>
+            INTERMISSION{" "}
+            <span className="text-xl">({game.periodDescriptor.number}/2)</span>
           </h1>
         ) : (
           <h1 className={`mt-2 font-mono font-extralight`}>
@@ -184,6 +228,9 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
                 <span></span>
               )}
             </h1>
+            {game.awayTeam.sog && (
+              <pre className="text-base">SOG: {game.awayTeam.sog}</pre>
+            )}
           </h1>
         </div>
         <div className="">
@@ -214,6 +261,9 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
                 <span></span>
               )}
             </h1>
+            {game.homeTeam.sog && (
+              <pre className="text-base">SOG: {game.homeTeam.sog}</pre>
+            )}
           </h1>
         </div>
       </div>
@@ -225,14 +275,18 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
         <LuExternalLink size={16} />
         <h1 className="text-lg">GAME OVERVIEW</h1>
       </Link>
-      <Link
-        className=" flex items-center space-x-2 border-b-2 border-transparent transition-all duration-500 hover:border-zinc-500 hover:border-opacity-100 hover:tracking-widest "
-        href={`https://nhl.com${game.threeMinRecap}`}
-        target="_blank"
-      >
-        <LuExternalLink size={16} />
-        <h1 className="text-lg">GAME RECAP</h1>
-      </Link>
+      {game.threeMinRecap ? (
+        <Link
+          className=" flex items-center space-x-2 border-b-2 border-transparent transition-all duration-500 hover:border-zinc-500 hover:border-opacity-100 hover:tracking-widest "
+          href={`https://nhl.com${game.threeMinRecap}`}
+          target="_blank"
+        >
+          <LuExternalLink size={16} />
+          <h1 className="text-lg">GAME RECAP</h1>
+        </Link>
+      ) : (
+        <h1 className="mt-2 text-center text-lg">RECAP NOT AVAILABLE</h1>
+      )}
 
       <div className="mt-10 w-2/5 ">
         {game.goals && (

@@ -31,4 +31,9 @@ export const postRouter = createTRPCRouter({
 
       return data;
     }),
+  playerInfo: publicProcedure.input(z.string()).query(async ({ input }) => {
+    const data = httpGet(`https://api-web.nhle.com/v1/player/${input}/landing`);
+
+    return data;
+  }),
 });
