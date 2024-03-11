@@ -8,7 +8,13 @@ import {
   type Goal,
   type ScoresResult,
 } from "~/lib/scoresResult";
-import { cn, goalStrengthFormatted, nhlClass, nthalize } from "~/lib/utils";
+import {
+  cn,
+  getUntil,
+  goalStrengthFormatted,
+  nhlClass,
+  nthalize,
+} from "~/lib/utils";
 import StateBadge from "./statebadge";
 import {
   Tooltip,
@@ -166,6 +172,13 @@ const GameView = ({ scoresNow, gameId }: GameViewProps) => {
         className="text-md flex items-center justify-center"
         state={game.gameState.toString()}
       />
+      {game.gameState === "PRE" || game.gameState === "FUT" ? (
+        <h1 className="mt-5 text-2xl font-bold">
+          Starting {getUntil(game.startTimeUTC)}
+        </h1>
+      ) : (
+        <span></span>
+      )}
       {game.clock &&
         (game.clock.inIntermission ? (
           <h1 className={`mt-2 text-2xl font-semibold`}>
