@@ -28,23 +28,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="theme-color" content="#000000" />
 
-        <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
-        <link
-          rel="apple-touch-icon"
-          sizes="152x152"
-          href="/icons/touch-icon-ipad.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/icons/touch-icon-iphone-retina.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="167x167"
-          href="/icons/touch-icon-ipad-retina.png"
-        />
-
         <link
           rel="icon"
           type="image/png"
