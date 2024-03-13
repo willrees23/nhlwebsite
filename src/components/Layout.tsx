@@ -7,6 +7,7 @@ import { Toaster } from "./ui/toaster";
 import { Button } from "./ui/button";
 import { LuMenu } from "react-icons/lu";
 import ScrollToTopButton from "./scrolltotop";
+import { useState } from "react";
 
 type LayoutProps = {
   pageTitle: string;
@@ -22,6 +23,7 @@ const Layout = ({
   children,
   loading = false,
 }: LayoutProps) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <>
       <Head>
@@ -72,10 +74,49 @@ const Layout = ({
                 >
                   STANDINGS
                 </Link>
-                <Button className="border p-2 sm:hidden">
-                  <LuMenu size={32} />
+                <Button
+                  className="border p-2 sm:hidden"
+                  onClick={() => {
+                    setMobileMenuOpen(!mobileMenuOpen);
+                  }}
+                >
+                  <LuMenu
+                    size={32}
+                    className={cn("transition-all duration-700", {
+                      "rotate-90": mobileMenuOpen,
+                    })}
+                  />
                 </Button>
               </div>
+            </div>
+
+            <div
+              className={cn(
+                "fixed -top-32 z-20 flex w-11/12 flex-col items-center justify-center rounded-md bg-primary p-2 pl-4 pr-4 shadow-sm shadow-zinc-900 transition-all duration-1000",
+                { "top-24": mobileMenuOpen },
+              )}
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
+            >
+              <Link
+                href={"/"}
+                className="animate-underline text-3xl hover:tracking-wider"
+              >
+                HOME
+              </Link>
+              <Link
+                href={"/schedule"}
+                className="animate-underline text-3xl hover:tracking-wider"
+              >
+                SCHEDULE
+              </Link>
+              <Link
+                href={"/standings"}
+                className="animate-underline text-3xl hover:tracking-wider"
+              >
+                STANDINGS
+              </Link>
             </div>
             {showPageTitle && (
               <h1
