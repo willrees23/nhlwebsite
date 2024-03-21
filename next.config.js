@@ -4,7 +4,6 @@
  */
 await import("./src/env.js");
 
-/** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
 
@@ -26,4 +25,13 @@ const config = {
   },
 };
 
-export default config;
+import withPWA from "next-pwa";
+
+const pwa = withPWA({
+  // next.js config
+  register: true,
+  skipWaiting: true,
+  dest: "public",
+});
+
+export default pwa(config);
