@@ -1,4 +1,6 @@
 /* eslint-disable */
+// @ts-nocheck
+
 // public/sw.js
 self.addEventListener("push", function (event) {
   const payload = event.data ? event.data.text() : "Notification.";
