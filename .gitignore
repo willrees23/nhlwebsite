@@ -44,3 +44,7 @@ public/sw.js
 public/sw.js.map
 public/workbox-e43f5367.js.map
 public/workbox-e43f5367.js
+public/service-worker.js
+public/service-worker.js.map
+public/worker-development.js
+public/fallback-development.js

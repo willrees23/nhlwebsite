@@ -7,7 +7,9 @@ import { Toaster } from "./ui/toaster";
 import { Button } from "./ui/button";
 import { LuMenu } from "react-icons/lu";
 import ScrollToTopButton from "./scrolltotop";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getSubscriptionFromBrowser } from "~/utils/test";
+import { set } from "date-fns";
 
 type LayoutProps = {
   pageTitle: string;
@@ -17,6 +19,11 @@ type LayoutProps = {
   loading?: boolean;
 };
 
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => void;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+};
+
 const Layout = ({
   pageTitle,
   showPageTitle = true,
@@ -24,6 +31,58 @@ const Layout = ({
   loading = false,
 }: LayoutProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
+  useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPromptRef.current = e as BeforeInstallPromptEvent;
+    });
+  });
+
+  const handleInstall = () => {
+    if (deferredPromptRef && deferredPromptRef.current) {
+      const deferredPrompt = deferredPromptRef.current;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      deferredPrompt.prompt();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      void deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the A2HS prompt");
+        } else {
+          console.log("User dismissed the A2HS prompt");
+        }
+        deferredPromptRef.current = null;
+      });
+    }
+  };
+
+  const [message, setMessage] = useState("");
+
+  const handleNotification = async () => {
+    try {
+      const subscription = await getSubscriptionFromBrowser();
+      const response = await fetch("api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscription),
+      });
+
+      if (response.ok) {
+        console.log("Notification sent");
+        const data = (await response.json()) as { message: string };
+        setMessage(data.message);
+      } else {
+        console.error("Failed to send notification");
+      }
+    } catch (error) {
+      console.error("Failed to send notification", error);
+      setMessage("Failed to send notification");
+    }
+  };
+
   return (
     <>
       <Head>
@@ -75,7 +134,21 @@ const Layout = ({
                   STANDINGS
                 </Link>
                 <Button
-                  className="border p-2 sm:hidden"
+                  onClick={handleInstall}
+                  className="border font-poppins"
+                  variant={"ghost"}
+                >
+                  Install
+                </Button>
+                <Button
+                  onClick={handleNotification}
+                  className="border font-poppins"
+                  variant={"ghost"}
+                >
+                  {message ? message : "Trigger Notification"}
+                </Button>
+                <Button
+                  className="absolute border p-2 max-sm:relative sm:hidden"
                   onClick={() => {
                     setMobileMenuOpen(!mobileMenuOpen);
                   }}

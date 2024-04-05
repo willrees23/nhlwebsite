@@ -41,6 +41,7 @@
     "cmdk": "^0.2.1",
     "date-fns": "^3.3.1",
     "dayjs": "^1.11.10",
+    "dotenv": "^16.4.5",
     "lucide-react": "^0.344.0",
     "next": "^14.1.0",
     "next-auth": "^4.24.6",
@@ -55,6 +56,7 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "web-push": "^3.6.7",
     "zod": "^3.22.4"
   },
   "devDependencies": {
