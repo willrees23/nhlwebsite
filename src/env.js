@@ -28,7 +28,6 @@ export const env = createEnv({
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
     WEB_PUSH_PRIVATE_KEY: z.string(),
-    NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY: z.string(),
   },
 
   /**
@@ -38,6 +37,8 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+
+    NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY: z.string(),
   },
 
   /**
