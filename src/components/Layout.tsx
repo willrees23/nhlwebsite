@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,8 +9,9 @@ import { Button } from "./ui/button";
 import { LuMenu } from "react-icons/lu";
 import ScrollToTopButton from "./scrolltotop";
 import { useEffect, useRef, useState } from "react";
-import { getSubscriptionFromBrowser } from "~/utils/test";
+import { subscribeAndGetSub } from "~/utils/push-utils";
 import { set } from "date-fns";
+import { api } from "~/utils/api";
 
 type LayoutProps = {
   pageTitle: string;
@@ -58,28 +60,43 @@ const Layout = ({
   };
 
   const [message, setMessage] = useState("");
+  const { data: subscriptions } = api.subscription.getSubscriptions.useQuery();
+  const subscriptionAdd = api.subscription.subscribe.useMutation();
 
   const handleNotification = async () => {
-    try {
-      const subscription = await getSubscriptionFromBrowser();
-      const response = await fetch("api/subscribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    // first
+    const subscription = await subscribeAndGetSub();
+    await subscriptionAdd.mutateAsync({
+      subscription: {
+        endpoint: subscription.endpoint,
+        keys: {
+          p256dh: subscription.toJSON().keys?.p256dh!,
+          auth: subscription.toJSON().keys?.auth!,
         },
-        body: JSON.stringify(subscription),
-      });
+      },
+    });
 
-      if (response.ok) {
-        console.log("Notification sent");
-        const data = (await response.json()) as { message: string };
-        setMessage(data.message);
-      } else {
-        console.error("Failed to send notification");
+    for (const subscription of subscriptions?.subscriptions ?? []) {
+      try {
+        const response = await fetch("api/send-notification", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(subscription),
+        });
+
+        if (response.ok) {
+          console.log("Notification sent");
+          const data = (await response.json()) as { message: string };
+          setMessage(data.message);
+        } else {
+          console.error("Failed to send notification");
+        }
+      } catch (error) {
+        console.error("Failed to send notification", error);
+        setMessage("Failed to send notification");
       }
-    } catch (error) {
-      console.error("Failed to send notification", error);
-      setMessage("Failed to send notification");
     }
   };
 

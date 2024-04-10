@@ -1,4 +1,10 @@
-async function getSubscriptionFromBrowser() {
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+// Gets the PushSubscription object from the browser
+
+import { api } from "./api";
+
+// If it doesn't exist, it creates a new one by requesting permission from the user
+async function subscribeAndGetSub() {
   if (!("serviceWorker" in navigator)) {
     throw new Error("Service Worker not supported");
   }
@@ -12,6 +18,14 @@ async function getSubscriptionFromBrowser() {
   });
 
   return subscription;
+}
+
+function getVapidDetails() {
+  return {
+    subject: "mailto:will.rees9132@gmail.com",
+    publicKey: process.env.NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY,
+    privateKey: process.env.WEB_PUSH_PRIVATE_KEY,
+  };
 }
 
 function urlBase64ToUint8Array(base64String: string) {
@@ -30,4 +44,4 @@ function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
-export { getSubscriptionFromBrowser };
+export { subscribeAndGetSub, getVapidDetails };
