@@ -91,7 +91,7 @@ const Layout = ({
           const data = (await response.json()) as { message: string };
           setMessage(data.message);
         } else {
-          console.error("Failed to send notification");
+          console.error("Failed to send notification", response.statusText);
         }
       } catch (error) {
         console.error("Failed to send notification", error);
