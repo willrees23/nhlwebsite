@@ -59,8 +59,6 @@ const Layout = ({
     }
   };
 
-  const [message, setMessage] = useState("");
-  const { data: subscriptions } = api.subscription.getSubscriptions.useQuery();
   const subscriptionAdd = api.subscription.subscribe.useMutation();
 
   const handleNotification = async () => {
@@ -75,29 +73,6 @@ const Layout = ({
         },
       },
     });
-
-    for (const subscription of subscriptions?.subscriptions ?? []) {
-      try {
-        const response = await fetch("api/send-notification", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(subscription),
-        });
-
-        if (response.ok) {
-          console.log("Notification sent");
-          const data = (await response.json()) as { message: string };
-          setMessage(data.message);
-        } else {
-          console.error("Failed to send notification", response.statusText);
-        }
-      } catch (error) {
-        console.error("Failed to send notification", error);
-        setMessage("Failed to send notification");
-      }
-    }
   };
 
   return (
@@ -162,7 +137,7 @@ const Layout = ({
                   className="border font-poppins"
                   variant={"ghost"}
                 >
-                  {message ? message : "Trigger Notification"}
+                  {"Get Notified!"}
                 </Button>
                 <Button
                   className="absolute border p-2 max-sm:relative sm:hidden"

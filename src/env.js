@@ -28,6 +28,7 @@ export const env = createEnv({
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
     WEB_PUSH_PRIVATE_KEY: z.string(),
+    API_FETCH_URL: z.string(),
   },
 
   /**
@@ -53,6 +54,7 @@ export const env = createEnv({
     WEB_PUSH_PRIVATE_KEY: process.env.WEB_PUSH_PRIVATE_KEY,
     NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY:
       process.env.NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY,
+    API_FETCH_URL: process.env.API_FETCH_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

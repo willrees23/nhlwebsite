@@ -21,6 +21,15 @@ function httpGet(theUrl: string) {
     },
   }).then((response) => response.json());
 }
+function httpPost(thepollingUrl: string, data: unknown) {
+  return fetch(thepollingUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
 
 const nthalize = (num: number) => {
   const str = nth(num);
@@ -171,4 +180,5 @@ export {
   isWithinNextHours,
   getLastSunday,
   getLastSundayDate,
+  httpPost,
 };

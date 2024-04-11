@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextApiRequest, type NextApiResponse } from "next";
@@ -11,14 +12,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const webpush = require("web-push");
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const subscription = req.body;
 
-  const auth = subscription.auth;
-  const endpoint = subscription.endpoint;
-  const p256dh = subscription.p256dh;
+  const body = req.body;
+
+  const auth = body.auth;
+  const endpoint = body.endpoint;
+  const p256dh = body.p256dh;
+
+  const message = body.message;
 
   const vapidDetails = getVapidDetails();
 
@@ -39,7 +42,7 @@ export default async function handler(
           p256dh,
         },
       },
-      "You got an update!",
+      message,
     );
     res.status(200).json({ message: "Notification sent" });
   } catch (error) {
