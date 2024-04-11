@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { env } from "./env";
 import { httpGet, httpPost } from "./lib/utils";
 import { db } from "./server/db";
 import { api } from "./utils/api";
@@ -63,7 +64,8 @@ export function register() {
               const p256dh = subscription.p256dh;
 
               try {
-                await httpPost("http://localhost:3000/api/send-notification", {
+                const apiUrl = process.env.API_FETCH_URL;
+                await httpPost(apiUrl + "api/send-notification", {
                   auth,
                   endpoint,
                   p256dh,
