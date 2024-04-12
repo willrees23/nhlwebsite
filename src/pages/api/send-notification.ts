@@ -12,6 +12,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>,
 ) {
+  console.log("SERVER");
+
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const webpush = require("web-push");
 
@@ -32,6 +34,8 @@ export default async function handler(
     vapidDetails.privateKey,
   );
 
+  console.log("Attempting!");
+
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     await webpush.sendNotification(
@@ -46,7 +50,6 @@ export default async function handler(
     );
     res.status(200).json({ message: "Notification sent" });
   } catch (error) {
-    console.error("Error sending notification:", error);
-    res.status(500).json({ message: "Error sending notification" });
+    console.log("Subscription details are invalid or expired.");
   }
 }
